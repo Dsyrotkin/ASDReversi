@@ -118,7 +118,8 @@ class ReversiBoard extends Pane {
     // private method that will reset the renders
     private void resetRenders() {
         for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++) render[i][j].setPiece(0);
+            for(int j = 0; j < 8; j++) 
+            	;//render[i][j].setPiece(0);
     }
 
     // private method that will initialise the background and the lines
@@ -322,8 +323,8 @@ class ReversiBoard extends Pane {
     private void initialiseRender() {
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++) {
-                render[i][j] = new ReversiPiece(0);
-                getChildren().add(render[i][j]);
+               // render[i][j] = new ReversiPiece(0);
+                //getChildren().add(render[i][j]);
             }
     }
 

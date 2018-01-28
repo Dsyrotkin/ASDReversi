@@ -21,6 +21,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -29,6 +30,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -173,24 +175,15 @@ public class Board extends Group {
         getChildren().add(lblPoints);
     }
     
-    private Rectangle createCell(int i, int j){
-        final double arcSize = CELL_SIZE / 6d;
-        Rectangle cell = new Rectangle(i * CELL_SIZE, j * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-        // provide default style in case css are not loaded
-        cell.setFill(Color.WHITE);
-        cell.setStroke(Color.GREY);
-        cell.setArcHeight(arcSize);
-        cell.setArcWidth(arcSize);
-        cell.getStyleClass().add("game-grid-cell");
-        return cell;
-    }
+
     
     private void createGrid() {
         
-        gridOperator.traverseGrid((i,j)->{
-            gridGroup.getChildren().add(createCell(i, j));
-            return 0;
-        });
+    	gridOperator.create(gridGroup, CELL_SIZE);
+//        gridOperator.traverseGrid((i,j)->{
+//            gridGroup.getChildren().add(createCell(i, j));
+//            return 0;
+//        });
 
         gridGroup.getStyleClass().add("game-grid");
         gridGroup.setManaged(false);

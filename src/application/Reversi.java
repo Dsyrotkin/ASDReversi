@@ -24,9 +24,9 @@ public class Reversi extends Application {
 	// overridden init method
 	public void init() {
 		root = new GamePane();
-		stackPane = new StackPane();
-		reversiControl = new ReversiControl();
-		stackPane.getChildren().add(reversiControl);
+//		stackPane = new StackPane();
+//		reversiControl = new ReversiControl();
+//		stackPane.getChildren().add(reversiControl);
 	}
 	
 	// overridden start method

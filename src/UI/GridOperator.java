@@ -7,6 +7,15 @@ import java.util.function.IntBinaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.sun.javafx.geom.Shape;
+
+
+import javafx.event.EventHandler;
+import javafx.scene.Group;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import application.ReversiPiece;
 /**
  *
  * @author jpereda
@@ -19,6 +28,8 @@ public class GridOperator {
     private final List<Integer> traversalX;
     private final List<Integer> traversalY;
     
+    private ReversiPiece[][] pieces;
+    
     public GridOperator(){
         this(DEFAULT_GRID_SIZE);
     }
@@ -30,8 +41,6 @@ public class GridOperator {
     }
     
     public void sortGrid(Direction direction){
-        Collections.sort(traversalX, direction.equals(Direction.RIGHT) ? Collections.reverseOrder() : Integer::compareTo);
-        Collections.sort(traversalY, direction.equals(Direction.DOWN)? Collections.reverseOrder() : Integer::compareTo);
     }
     
     public int traverseGrid(IntBinaryOperator func) {
@@ -49,6 +58,21 @@ public class GridOperator {
     
     public boolean isValidLocation(Location loc){
         return loc.getX() >= 0 && loc.getX() < gridSize && loc.getY() >= 0 && loc.getY() < gridSize;
+    }
+    
+    public void create(Group group, int CELL_SIZE)
+    {
+    	pieces=new ReversiPiece[DEFAULT_GRID_SIZE][DEFAULT_GRID_SIZE];
+    	for (int i=0;i<DEFAULT_GRID_SIZE;i++)
+    		for (int j=0;j<DEFAULT_GRID_SIZE;j++)
+    		{
+    			pieces[i][j]=createCell(j,i, CELL_SIZE);
+    			group.getChildren().add(pieces[i][j]);
+    		}
+    }
+    private ReversiPiece createCell(int row, int col, int CELL_SIZE){
+        
+        return new ReversiPiece(0,row,col,CELL_SIZE);
     }
     
 }

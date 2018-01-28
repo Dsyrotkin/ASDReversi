@@ -1,8 +1,11 @@
 package application;
 
+import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Translate;
 
 /**
@@ -10,26 +13,61 @@ import javafx.scene.transform.Translate;
  * 31/10/2017.
  */
 //class definition for a reversi piece
-class ReversiPiece extends Group {
+public class ReversiPiece extends Group {
+	int row,col;
+	
     // default constructor for the class
-    public ReversiPiece(int player) {
+    public ReversiPiece(int player,int row, int col, int CELL_SIZE) {
+    	
+    	this.row=row;
+        this.col=col;
+        
+        createEclipse(CELL_SIZE);
+        
+        setPiece(player);
+        
+        getChildren().add(createCell(CELL_SIZE));
+        getChildren().add(piece);
+        
+    }
+    private void createEclipse(int CELL_SIZE){
         t = new Translate();
         piece = new Ellipse();
+        resize(CELL_SIZE,CELL_SIZE);
         piece.getTransforms().add(t);
-        setPiece(player);
-        getChildren().add(piece);
+        
     }
-
+    private Rectangle createCell(int CELL_SIZE){
+        final double arcSize = CELL_SIZE / 6d;
+        Rectangle cell = new Rectangle(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        // provide default style in case css are not loaded
+        cell.setFill(Color.WHITE);
+        cell.setStroke(Color.GREY);
+        cell.setArcHeight(arcSize);
+        cell.setArcWidth(arcSize);
+        cell.getStyleClass().add("game-grid-cell");
+        
+        return cell;
+    }
     // overridden version of the resize method to give the piece the correct size
     @Override
     public void resize(double width, double height) {
         super.resize(width, height);
 
-        piece.setCenterX(width / 2);
-        piece.setCenterY(width / 2);
+        double r=width / 2-4;
+        piece.setCenterX(col * width+width/2);
+        piece.setCenterY(row * width+width/2);
 
-        piece.setRadiusX(width / 2);
-        piece.setRadiusY(height / 2);
+        piece.setRadiusX(r);
+        piece.setRadiusY(r);
+        
+        piece.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println("onclik "+row+","+col);
+                swapPiece();
+            }
+        });
     }
 
     // overridden version of the relocate method to position the piece correctly
