@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
  */
 public class GridOperator {
     
-    public static final int DEFAULT_GRID_SIZE = 4;
+    public static final int DEFAULT_GRID_SIZE = 8;
 
     private final int gridSize;
     private final List<Integer> traversalX;

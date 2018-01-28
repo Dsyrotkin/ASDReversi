@@ -36,8 +36,8 @@
     -fx-border-radius: 3;
 }
 .game-grid-cell {
-    -fx-fill: #cdc1b4;
-    -fx-stroke-width: 14px;
+    -fx-fill: #008000;
+    -fx-stroke-width: 1px;
     -fx-stroke-type: centered;
     -fx-stroke: #BBADA0;
 }
