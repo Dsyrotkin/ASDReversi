@@ -36,15 +36,9 @@ import javafx.util.Duration;
  */
 public class GameManager extends Group {
 
-    public static final int FINAL_VALUE_TO_WIN = 2048;
     public static final int DEFAULT_GRID_SIZE=8;
     
-    private static final Duration ANIMATION_EXISTING_TILE = Duration.millis(65);
-    private static final Duration ANIMATION_NEWLY_ADDED_TILE = Duration.millis(125);
-    private static final Duration ANIMATION_MERGED_TILE = Duration.millis(80);
-    
-    private volatile boolean movingTiles = false;
-    private final List<Location> locations = new ArrayList<>();
+
 
     private final Board board;
     private final GridOperator gridOperator;
