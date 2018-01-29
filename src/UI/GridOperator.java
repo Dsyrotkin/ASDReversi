@@ -17,11 +17,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import application.ReversiPiece;
 import engine.IOnClickListener;
+import engine.IPieceInfo;
 /**
  *
  * @author jpereda
  */
-public class GridOperator {
+public class GridOperator implements IPieceInfo {
     
 
     private final int gridSize;
@@ -89,4 +90,22 @@ public class GridOperator {
         
         current_player = 2;
     }
+
+	
+
+	@Override
+	public int getRow() {
+		// TODO Auto-generated method stub
+		return pieces.length;
+	}
+
+	@Override
+	public int getPiece(int row, int col) {
+		return pieces[row][col].getPiece();
+	}
+
+	@Override
+	public void setPiece(int row, int col, int player) {
+		pieces[row][col].setPiece(player);
+	}
 }
