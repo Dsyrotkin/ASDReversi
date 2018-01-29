@@ -149,7 +149,7 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
 
     // private method for placing a piece and reversing pieces
     private void placeAndReverse(final int x, final int y) {
-        pieceInfo.setPiece(x,y,current_player);
+        //pieceInfo.setPiece(x,y,current_player);
         for(int i = x - 1; i <= x + 1; i++)
             for(int j = y - 1; j <= y + 1; j++) {
                 if(isValidIndex(i, j) && (i != x || j != y) && can_reverse[i-(x-1)][j-(y-1)]) {
@@ -191,7 +191,7 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
                         player2_score++;
                         break;
                 }
-        scoreListener.update(player1_score, player2_score);
+        scoreListener.update(this.current_player, player1_score, player2_score);
     }
     // private method that will determine if the end of the game has been reached
     private void determineEndGame() {
