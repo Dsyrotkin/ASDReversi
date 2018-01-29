@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import application.Reversi;
+import engine.IOnClickListener;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -523,7 +524,8 @@ public class Board extends Group {
     
     public void startGame(){
         restoreRecord();
-
+        
+        this.gridOperator.startGame();
         time=LocalTime.now();
         timer.playFromStart();
     }

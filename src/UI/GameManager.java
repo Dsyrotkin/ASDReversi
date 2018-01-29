@@ -15,6 +15,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import engine.ReversiEngine;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -35,6 +37,7 @@ import javafx.util.Duration;
 public class GameManager extends Group {
 
     public static final int FINAL_VALUE_TO_WIN = 2048;
+    public static final int DEFAULT_GRID_SIZE=8;
     
     private static final Duration ANIMATION_EXISTING_TILE = Duration.millis(65);
     private static final Duration ANIMATION_NEWLY_ADDED_TILE = Duration.millis(125);
@@ -45,9 +48,10 @@ public class GameManager extends Group {
 
     private final Board board;
     private final GridOperator gridOperator;
+    ReversiEngine engine=new ReversiEngine();
 
     public GameManager() {
-        this(GridOperator.DEFAULT_GRID_SIZE);
+        this(DEFAULT_GRID_SIZE);
     }
     
     /**
@@ -61,8 +65,11 @@ public class GameManager extends Group {
      */
     public GameManager(int gridSize) {
         
-        gridOperator=new GridOperator(gridSize);
+        gridOperator=new GridOperator(gridSize,engine);
+    	
         board = new Board(gridOperator);
+        
+        
         this.getChildren().add(board);
 
         board.clearGameProperty().addListener((ov, b, b1) -> {
@@ -94,12 +101,7 @@ public class GameManager extends Group {
      * Initializes all cells in gameGrid map to null
      */
     private void initializeGameGrid() {
-        locations.clear();
-        gridOperator.traverseGrid((x, y) -> {
-            Location thisloc = new Location(x, y);
-            locations.add(thisloc);
-            return 0;
-        });
+        
     }
 
     /**

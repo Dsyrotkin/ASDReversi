@@ -1,5 +1,6 @@
 package application;
 
+import engine.IOnClickListener;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
@@ -17,12 +18,12 @@ public class ReversiPiece extends Group {
 	int row,col;
 	
     // default constructor for the class
-    public ReversiPiece(int player,int row, int col, int CELL_SIZE) {
+    public ReversiPiece(int player,int row, int col, int CELL_SIZE, IOnClickListener listener) {
     	
     	this.row=row;
         this.col=col;
         
-        createEclipse(CELL_SIZE);
+        createEclipse(CELL_SIZE,listener);
         
         setPiece(player);
         
@@ -30,10 +31,19 @@ public class ReversiPiece extends Group {
         getChildren().add(piece);
         
     }
-    private void createEclipse(int CELL_SIZE){
+    private void createEclipse(int CELL_SIZE, IOnClickListener listener){
         t = new Translate();
         piece = new Ellipse();
         resize(CELL_SIZE,CELL_SIZE);
+        piece.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                              
+                swapPiece();
+                listener.onClick(row, col);
+            }
+        });
+        
         piece.getTransforms().add(t);
         
     }
@@ -61,13 +71,7 @@ public class ReversiPiece extends Group {
         piece.setRadiusX(r);
         piece.setRadiusY(r);
         
-        piece.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                System.out.println("onclik "+row+","+col);
-                swapPiece();
-            }
-        });
+        
     }
 
     // overridden version of the relocate method to position the piece correctly
