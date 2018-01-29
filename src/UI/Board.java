@@ -53,6 +53,7 @@ public class Board extends Group implements IScoreListener{
     private static final int TOP_HEIGHT = 92;
     private static final int GAP_HEIGHT = 50;
     private static final int TOOLBAR_HEIGHT = 80;
+    private static final int TOOLBAR_GAP_HEIGHT = 10;
 
     private final IntegerProperty gameScoreProperty = new SimpleIntegerProperty(0);
     private final IntegerProperty gameBestProperty = new SimpleIntegerProperty(0);
@@ -153,14 +154,14 @@ public class Board extends Group implements IScoreListener{
         vScores.getChildren().addAll(hScores,vFill);
                 
         hTop.getChildren().addAll(lblSubtitle, hFill,vScores);
-        hTop.setMinSize(gridWidth, TOP_HEIGHT);
-        hTop.setPrefSize(gridWidth, TOP_HEIGHT);
-        hTop.setMaxSize(gridWidth, TOP_HEIGHT);
+        hTop.setMinSize(gridWidth, TOOLBAR_HEIGHT);
+        hTop.setPrefSize(gridWidth, TOOLBAR_HEIGHT);
+        hTop.setMaxSize(gridWidth, TOOLBAR_HEIGHT);
 
         vGame.getChildren().add(hTop);
 
         HBox hTime=new HBox();
-        hTime.setMinSize(gridWidth, GAP_HEIGHT);
+        hTime.setMinSize(gridWidth, TOOLBAR_GAP_HEIGHT);
         hTime.setAlignment(Pos.BOTTOM_RIGHT);
         lblTime.getStyleClass().addAll("game-label","game-time");
         lblTime.textProperty().bind(clock);
@@ -170,7 +171,7 @@ public class Board extends Group implements IScoreListener{
         timer.setCycleCount(Animation.INDEFINITE);
         hTime.getChildren().add(lblTime);
         
-        vGame.getChildren().add(hTime);
+        //vGame.getChildren().add(hTime);
         getChildren().add(vGame);
         
         lblPoints.getStyleClass().addAll("game-label","game-points");
@@ -210,9 +211,9 @@ public class Board extends Group implements IScoreListener{
         // toolbar
         
         HBox hPadding= new HBox();
-        hPadding.setMinSize(gridWidth, TOOLBAR_HEIGHT);
-        hPadding.setPrefSize(gridWidth, TOOLBAR_HEIGHT);
-        hPadding.setMaxSize(gridWidth, TOOLBAR_HEIGHT);
+        hPadding.setMinSize(gridWidth, TOOLBAR_GAP_HEIGHT);
+        hPadding.setPrefSize(gridWidth, TOOLBAR_GAP_HEIGHT);
+        hPadding.setMaxSize(gridWidth, TOOLBAR_GAP_HEIGHT);
         
         hToolbar.setAlignment(Pos.CENTER);
         hToolbar.getStyleClass().add("game-backGrid");
