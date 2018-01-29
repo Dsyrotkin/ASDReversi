@@ -1,4 +1,4 @@
-package application;
+package UI;
 
 import engine.IOnClickListener;
 import javafx.event.EventHandler;

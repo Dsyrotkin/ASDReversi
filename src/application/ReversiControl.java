@@ -17,7 +17,6 @@ class ReversiControl extends Control {
 
     // constructor for the class
     public ReversiControl() {
-        setSkin(new ReversiControlSkin(this));
         reversiBoard = new ReversiBoard();
         getChildren().add(reversiBoard);
 

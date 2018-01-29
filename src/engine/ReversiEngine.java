@@ -1,6 +1,6 @@
 package engine;
 
-import application.ReversiPiece;
+import UI.ReversiPiece;
 
 public class ReversiEngine implements IOnClickListener{
 

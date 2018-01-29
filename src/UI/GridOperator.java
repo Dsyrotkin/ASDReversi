@@ -15,7 +15,6 @@ import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import application.ReversiPiece;
 import engine.IOnClickListener;
 import engine.IPieceInfo;
 /**

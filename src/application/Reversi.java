@@ -15,18 +15,14 @@ import javafx.stage.Stage;
 //class defnition for reversi game
 public class Reversi extends Application {
 	public static final String VERSION = "1.0";
-	
-	private StackPane stackPane;
-	private ReversiControl reversiControl;
+
 	
 	private GamePane root;
 
 	// overridden init method
 	public void init() {
 		root = new GamePane();
-//		stackPane = new StackPane();
-//		reversiControl = new ReversiControl();
-//		stackPane.getChildren().add(reversiControl);
+
 	}
 	
 	// overridden start method
@@ -49,10 +45,7 @@ public class Reversi extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
-	// private fields for a stack pane and a reversi control
-	private StackPane sp_mainlayout;
-	private ReversiControl rc_reversi;
+
 	
 }
 
