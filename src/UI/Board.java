@@ -85,8 +85,7 @@ public class Board extends Group implements IScoreListener{
     private final Group gridGroup = new Group();
 
     private final HBox hTop = new HBox(0);
-    private final VBox vScore = new VBox(-5);
-    Label lbPlayer1,lbPlayer2;
+    private final HBox vScore = new HBox(0);
     Circle circle1, circle2;
     
     private final Label lblScore1 = new Label("0");
@@ -145,13 +144,11 @@ public class Board extends Group implements IScoreListener{
         final double PADDING = 20;
         circle1.setRadius(PADDING);
         
-        lbPlayer1 = new Label("White");
-        lbPlayer1.getStyleClass().addAll("game-label","game-titScore");
         lblScore1.getStyleClass().addAll("game-label","game-score");
         //lblScore1.textProperty().bind(gameScoreProperty.asString());
         vScore.getChildren().addAll(circle1,lblScore1);
 
-        VBox vRecord = new VBox(-5);
+        HBox vRecord = new HBox(0);
         vRecord.setAlignment(Pos.CENTER);
         vRecord.getStyleClass().add("game-vbox");
         
@@ -160,8 +157,6 @@ public class Board extends Group implements IScoreListener{
         circle2.setFill(Color.BLACK);
         circle2.setRadius(PADDING);
         
-        lbPlayer2 = new Label("Black");
-        lbPlayer2.getStyleClass().addAll("game-label","game-titScore");
         lblScore2.getStyleClass().addAll("game-label","game-score");
         //lblScore2.textProperty().bind(gameBestProperty.asString());
         vRecord.getChildren().addAll(circle2, lblScore2);
@@ -688,15 +683,11 @@ public class Board extends Group implements IScoreListener{
 			
 			circle1.setStroke(select);
 			circle2.setStroke(unselect);
-			lbPlayer1.setText("[White]");
-			lbPlayer2.setText("Black");
 		}
 		else
 		{
 			circle1.setStroke(unselect);
 			circle2.setStroke(select);
-			lbPlayer1.setText("White");
-			lbPlayer2.setText("[Black]");
 		}
 			
 	}
