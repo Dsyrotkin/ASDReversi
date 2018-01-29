@@ -75,9 +75,6 @@ public class GridOperator implements IPieceInfo {
     }
     
 
-
-	
-
 	@Override
 	public int getRow() {
 		// TODO Auto-generated method stub

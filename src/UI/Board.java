@@ -37,6 +37,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -84,6 +87,7 @@ public class Board extends Group implements IScoreListener{
     private final HBox hTop = new HBox(0);
     private final VBox vScore = new VBox(-5);
     Label lbPlayer1,lbPlayer2;
+    Circle circle1, circle2;
     
     private final Label lblScore1 = new Label("0");
     private final Label lblScore2 = new Label("0");
@@ -134,21 +138,36 @@ public class Board extends Group implements IScoreListener{
         
         vScore.setAlignment(Pos.CENTER);
         vScore.getStyleClass().add("game-vbox");
+        
+        circle1 = new Circle();
+        circle1.setStrokeWidth(4);
+        circle1.setFill(Color.WHITE);
+        final double PADDING = 20;
+        circle1.setRadius(PADDING);
+        
         lbPlayer1 = new Label("White");
         lbPlayer1.getStyleClass().addAll("game-label","game-titScore");
         lblScore1.getStyleClass().addAll("game-label","game-score");
         //lblScore1.textProperty().bind(gameScoreProperty.asString());
-        vScore.getChildren().addAll(lbPlayer1, lblScore1);
+        vScore.getChildren().addAll(circle1,lblScore1);
 
         VBox vRecord = new VBox(-5);
         vRecord.setAlignment(Pos.CENTER);
         vRecord.getStyleClass().add("game-vbox");
+        
+        circle2 = new Circle();
+        circle2.setStrokeWidth(4);
+        circle2.setFill(Color.BLACK);
+        circle2.setRadius(PADDING);
+        
         lbPlayer2 = new Label("Black");
         lbPlayer2.getStyleClass().addAll("game-label","game-titScore");
         lblScore2.getStyleClass().addAll("game-label","game-score");
         //lblScore2.textProperty().bind(gameBestProperty.asString());
-        vRecord.getChildren().addAll(lbPlayer2, lblScore2);
+        vRecord.getChildren().addAll(circle2, lblScore2);
         hScores.getChildren().addAll(vScore,vRecord);
+        
+        
         VBox vFill = new VBox();
         VBox.setVgrow(vFill, Priority.ALWAYS);
         vScores.getChildren().addAll(hScores,vFill);
@@ -662,13 +681,20 @@ public class Board extends Group implements IScoreListener{
 		lblScore1.setText(String.valueOf(score1));
 		lblScore2.setText(String.valueOf(score2));
 		
+		Paint select=Color.GOLD;
+		Paint unselect=Color.TRANSPARENT;
 		if (currentplayer==1)
 		{
+			
+			circle1.setStroke(select);
+			circle2.setStroke(unselect);
 			lbPlayer1.setText("[White]");
 			lbPlayer2.setText("Black");
 		}
 		else
 		{
+			circle1.setStroke(unselect);
+			circle2.setStroke(select);
 			lbPlayer1.setText("White");
 			lbPlayer2.setText("[Black]");
 		}
