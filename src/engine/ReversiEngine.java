@@ -51,24 +51,25 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
         if(!in_play)
             return;
 
-        // if there is a piece already placed then return and do nothing
-        if(pieceInfo.getPiece(cellx, celly) != 0)
-            return;
+        int currentpiece=pieceInfo.getPiece(cellx, celly);
+        if (currentpiece==0)
+        	pieceInfo.setPiece(cellx, celly, current_player);
+    	
 
         // determine what pieces surround the current piece. if there is no opposing
         // pieces then a valid move cannot be made.
         determineSurrounding(cellx, celly);
         
-        if(!adjacentOpposingPiece())
-            return;
-
-        // see if a reverse can be made in any direction if none can be made then return
-        if(!determineReverse(cellx, celly))
-            return;
-
-        // at this point we have done all the checks and they have passed so now we can place
-        // the piece and perform the reversing also check if the game has ended
-        placeAndReverse(cellx, celly);
+//        if(!adjacentOpposingPiece())
+//            return;
+//
+//        // see if a reverse can be made in any direction if none can be made then return
+//        if(!determineReverse(cellx, celly))
+//            return;
+//        
+//        // at this point we have done all the checks and they have passed so now we can place
+//        // the piece and perform the reversing also check if the game has ended
+//        placeAndReverse(cellx, celly);
 
         // if we get to this point then a successful move has been made so swap the
         // players and update the scores

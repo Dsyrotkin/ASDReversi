@@ -69,7 +69,7 @@ public class GridOperator implements IPieceInfo {
     	for (int i=0;i<gridSize;i++)
     		for (int j=0;j<gridSize;j++)
     		{
-    			pieces[i][j]=createCell(j,i, CELL_SIZE);
+    			pieces[i][j]=createCell(i,j, CELL_SIZE);
     			group.getChildren().add(pieces[i][j]);
     		}
     }

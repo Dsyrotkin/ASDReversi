@@ -41,10 +41,7 @@ public class ReversiPiece extends Group {
         piece.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-            	if (player==0)
-            		setPiece(iPlayer.getCurrentPlayer());
-            	else
-            		swapPiece();
+            	
                 listener.onClick(row, col);
             }
         });
