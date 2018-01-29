@@ -108,28 +108,10 @@ public class GameManager extends Group {
      * Starts the game by adding 1 or 2 tiles at random locations
      */
     private void startGame() {
-        List<Location> randomLocs = new ArrayList<>(locations);
-        Collections.shuffle(randomLocs);
-        Iterator<Location> locs = randomLocs.stream().limit(2).iterator();
-
-       
-        redrawTilesInGameGrid();
 
         board.startGame();
     }
     
-    /**
-     * Redraws all tiles in the <code>gameGrid</code> object
-     */
-    private void redrawTilesInGameGrid() {
-        //gameGrid.values().stream().filter(Objects::nonNull).forEach(t->board.addTile(t));
-    }
-
-
-    
-
-
-
 
     /**
      * Set gameManager scale to adjust overall game size
