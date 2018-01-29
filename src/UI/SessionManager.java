@@ -27,14 +27,14 @@ public class SessionManager {
         this.SESSION_PROPERTIES_FILENAME = "game2048_" + gridOperator.getGridSize() + ".properties";
     }
 
-    public void saveSession(Map<Location, Tile> gameGrid, Integer score, Long time) {
+    public void saveSession(Map<Location, Object> gameGrid, Integer score, Long time) {
         try {
-            gridOperator.traverseGrid((x,y)->{
-                Tile t = gameGrid.get(new Location(x, y));
-                props.setProperty("Location_" + x + "_" + y,
-                        t!=null? t.getValue().toString() : "0");
-                return 0;
-            });
+//            gridOperator.traverseGrid((x,y)->{
+//                Tile t = gameGrid.get(new Location(x, y));
+//                props.setProperty("Location_" + x + "_" + y,
+//                        t!=null? t.getValue().toString() : "0");
+//                return 0;
+//            });
             props.setProperty("score", score.toString());
             props.setProperty("time", time.toString());
             props.store(new FileWriter(SESSION_PROPERTIES_FILENAME), SESSION_PROPERTIES_FILENAME);
@@ -43,7 +43,7 @@ public class SessionManager {
         }
     }
 
-    public int restoreSession(Map<Location, Tile> gameGrid, StringProperty time) {
+    public int restoreSession(Map<Location, Object> gameGrid, StringProperty time) {
         Reader reader = null;
         try {
             reader = new FileReader(SESSION_PROPERTIES_FILENAME);
@@ -65,10 +65,10 @@ public class SessionManager {
         gridOperator.traverseGrid((x,y)->{
             String val = props.getProperty("Location_" + x + "_" + y);
             if (!val.equals("0")) {
-                Tile t = Tile.newTile(new Integer(val));
-                Location l = new Location(x, y);
-                t.setLocation(l);
-                gameGrid.put(l, t);
+//                Tile t = Tile.newTile(new Integer(val));
+//                Location l = new Location(x, y);
+//                t.setLocation(l);
+//                gameGrid.put(l, t);
             }
             return 0;
         });

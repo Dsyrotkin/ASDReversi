@@ -463,7 +463,6 @@ public class Board extends Group {
     
     private void doClearGame() {
         saveRecord();
-        gridGroup.getChildren().removeIf(c->c instanceof Tile);
         getChildren().removeAll(overlay, buttonsOverlay);
         
         clearGame.set(false);
@@ -514,31 +513,9 @@ public class Board extends Group {
         timeline.play();
     }
     
-    public void addTile(Tile tile){
-        double layoutX = tile.getLocation().getLayoutX(CELL_SIZE) - (tile.getMinWidth() / 2);
-        double layoutY = tile.getLocation().getLayoutY(CELL_SIZE) - (tile.getMinHeight() / 2);
 
-        tile.setLayoutX(layoutX);
-        tile.setLayoutY(layoutY);
-        gridGroup.getChildren().add(tile);
-    }
     
-    public Tile addRandomTile(Location randomLocation) {
-        Tile tile = Tile.newRandomTile();
-        tile.setLocation(randomLocation);
 
-        double layoutX = tile.getLocation().getLayoutX(CELL_SIZE) - (tile.getMinWidth() / 2);
-        double layoutY = tile.getLocation().getLayoutY(CELL_SIZE) - (tile.getMinHeight() / 2);
-
-        tile.setLayoutX(layoutX);
-        tile.setLayoutY(layoutY);
-        tile.setScaleX(0);
-        tile.setScaleY(0);
-
-        gridGroup.getChildren().add(tile);
-        
-        return tile;
-    }
     
     public Group getGridGroup() {
         return gridGroup;
@@ -619,9 +596,9 @@ public class Board extends Group {
     /*
     Once we have confirmation
     */
-    public void saveSession(Map<Location, Tile> gameGrid) {
+    public void saveSession(Map<Location, Object> gameGrid) {
         saveGame.set(false);
-        sessionManager.saveSession(gameGrid, gameScoreProperty.getValue(), LocalTime.now().minusNanos(time.toNanoOfDay()).toNanoOfDay());
+        //sessionManager.saveSession(gameGrid, gameScoreProperty.getValue(), LocalTime.now().minusNanos(time.toNanoOfDay()).toNanoOfDay());
         keepGoing();
     }
     
@@ -635,30 +612,30 @@ public class Board extends Group {
     /*
     Once we have confirmation
     */
-    public boolean restoreSession(Map<Location, Tile> gameGrid) {
+    public boolean restoreSession(Map<Location, Object> gameGrid) {
         timerPause.stop();
         restoreGame.set(false);
         doClearGame();
         timer.stop();
         StringProperty sTime=new SimpleStringProperty("");
-        int score = sessionManager.restoreSession(gameGrid, sTime);
-        if (score >= 0) {
-            gameScoreProperty.set(score);
-            // check tiles>=2048
-            gameWonProperty.set(false);
-            gameGrid.forEach((l,t)->{
-               if(t!=null && t.getValue()>=GameManager.FINAL_VALUE_TO_WIN){
-                   gameWonProperty.removeListener(wonListener);
-                   gameWonProperty.set(true);
-                   gameWonProperty.addListener(wonListener);
-               }
-            });
-            if(!sTime.get().isEmpty()){
-                time = LocalTime.now().minusNanos(new Long(sTime.get()));
-            }
-            timer.play();
-            return true;
-        } 
+//        int score = sessionManager.restoreSession(gameGrid, sTime);
+//        if (score >= 0) {
+//            gameScoreProperty.set(score);
+//            // check tiles>=2048
+//            gameWonProperty.set(false);
+//            gameGrid.forEach((l,t)->{
+//               if(t!=null && t.getValue()>=GameManager.FINAL_VALUE_TO_WIN){
+//                   gameWonProperty.removeListener(wonListener);
+//                   gameWonProperty.set(true);
+//                   gameWonProperty.addListener(wonListener);
+//               }
+//            });
+//            if(!sTime.get().isEmpty()){
+//                time = LocalTime.now().minusNanos(new Long(sTime.get()));
+//            }
+//            timer.play();
+//            return true;
+//        } 
         // not session found, restart again
         doResetGame();
         return false;
