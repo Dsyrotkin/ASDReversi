@@ -7,6 +7,7 @@ import java.util.Map;
 
 import application.Reversi;
 import engine.IOnClickListener;
+import engine.IScoreListener;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -46,7 +47,7 @@ import javafx.util.Duration;
  *
  * @author jpereda
  */
-public class Board extends Group {
+public class Board extends Group implements IScoreListener{
     public static final int CELL_SIZE = 64;
     private static final int BORDER_WIDTH = (14 + 2) / 2;
     private static final int TOP_HEIGHT = 92;
@@ -81,8 +82,8 @@ public class Board extends Group {
 
     private final HBox hTop = new HBox(0);
     private final VBox vScore = new VBox(-5);
-    private final Label lblScore = new Label("0");
-    private final Label lblBest = new Label("0");
+    private final Label lblScore1 = new Label("0");
+    private final Label lblScore2 = new Label("0");
     private final Label lblPoints = new Label();
     
     private final HBox overlay = new HBox();
@@ -130,20 +131,20 @@ public class Board extends Group {
         
         vScore.setAlignment(Pos.CENTER);
         vScore.getStyleClass().add("game-vbox");
-        Label lblTit = new Label("SCORE");
+        Label lblTit = new Label("White");
         lblTit.getStyleClass().addAll("game-label","game-titScore");
-        lblScore.getStyleClass().addAll("game-label","game-score");
-        lblScore.textProperty().bind(gameScoreProperty.asString());
-        vScore.getChildren().addAll(lblTit, lblScore);
+        lblScore1.getStyleClass().addAll("game-label","game-score");
+        //lblScore1.textProperty().bind(gameScoreProperty.asString());
+        vScore.getChildren().addAll(lblTit, lblScore1);
 
         VBox vRecord = new VBox(-5);
         vRecord.setAlignment(Pos.CENTER);
         vRecord.getStyleClass().add("game-vbox");
-        Label lblTitBest = new Label("BEST");
+        Label lblTitBest = new Label("Black");
         lblTitBest.getStyleClass().addAll("game-label","game-titScore");
-        lblBest.getStyleClass().addAll("game-label","game-score");
-        lblBest.textProperty().bind(gameBestProperty.asString());
-        vRecord.getChildren().addAll(lblTitBest, lblBest);
+        lblScore2.getStyleClass().addAll("game-label","game-score");
+        //lblScore2.textProperty().bind(gameBestProperty.asString());
+        vRecord.getChildren().addAll(lblTitBest, lblScore2);
         hScores.getChildren().addAll(vScore,vRecord);
         VBox vFill = new VBox();
         VBox.setVgrow(vFill, Priority.ALWAYS);
@@ -652,5 +653,12 @@ public class Board extends Group {
 //        RecordManager recordManager = new RecordManager(gridOperator.getGridSize());
 //        gameBestProperty.set(recordManager.restoreRecord());
     }
+
+	@Override
+	public void update(int score1, int score2) {
+		// TODO Auto-generated method stub
+		lblScore1.setText(String.valueOf(score1));
+		lblScore2.setText(String.valueOf(score2));
+	}
     
 }

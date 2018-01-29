@@ -63,6 +63,7 @@ public class GameManager extends Group {
         engine.setPiece(gridOperator);
     	
         board = new Board(gridOperator);
+        engine.setScoreListener(board);
         
         this.getChildren().add(board);
 

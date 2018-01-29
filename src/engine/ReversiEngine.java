@@ -20,6 +20,8 @@ public class ReversiEngine implements IOnClickListener{
     
     IPieceInfo pieceInfo;
     
+    IScoreListener scoreListener;
+    
     public ReversiEngine()
     {
     	current_player = 2;
@@ -31,6 +33,11 @@ public class ReversiEngine implements IOnClickListener{
     {
     	this.pieceInfo=pieceInfo;
     }
+    public void setScoreListener(IScoreListener scoreListener)
+    {
+    	this.scoreListener=scoreListener;
+    }
+    
 	@Override
 	public void onClick(int row, int col) {
 		System.out.println("onclik "+row+","+col);		
@@ -184,6 +191,7 @@ public class ReversiEngine implements IOnClickListener{
                         player2_score++;
                         break;
                 }
+        scoreListener.update(player1_score, player2_score);
     }
     // private method that will determine if the end of the game has been reached
     private void determineEndGame() {
