@@ -1,6 +1,7 @@
 package UI;
 
 import engine.IOnClickListener;
+import engine.IPlayer;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
@@ -18,12 +19,13 @@ public class ReversiPiece extends Group {
 	int row,col;
 	
     // default constructor for the class
-    public ReversiPiece(int player,int row, int col, int CELL_SIZE, IOnClickListener listener) {
+    public ReversiPiece(int player, int row, int col, int CELL_SIZE, 
+    		IOnClickListener listener, IPlayer iPlayer) {
     	
     	this.row=row;
         this.col=col;
         
-        createEclipse(CELL_SIZE,listener);
+        createEclipse(CELL_SIZE,listener,iPlayer);
         
         setPiece(player);
         
@@ -31,15 +33,18 @@ public class ReversiPiece extends Group {
         getChildren().add(piece);
         
     }
-    private void createEclipse(int CELL_SIZE, IOnClickListener listener){
+    private void createEclipse(int CELL_SIZE, 
+    		IOnClickListener listener, IPlayer iPlayer){
         t = new Translate();
         piece = new Ellipse();
         resize(CELL_SIZE,CELL_SIZE);
         piece.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                              
-                swapPiece();
+            	if (player==0)
+            		setPiece(iPlayer.getCurrentPlayer());
+            	else
+            		swapPiece();
                 listener.onClick(row, col);
             }
         });
@@ -84,8 +89,10 @@ public class ReversiPiece extends Group {
 
     // public method that will swap the colour and type of this piece
     public void swapPiece() {
-        if(player == 1) setPiece(2);
-        else setPiece(1);
+        if(player == 1) 
+        	setPiece(2);
+        else 
+        	setPiece(1);
     }
 
     // method that will set the piece type

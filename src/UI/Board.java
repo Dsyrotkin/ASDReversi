@@ -526,7 +526,6 @@ public class Board extends Group implements IScoreListener{
     public void startGame(){
         restoreRecord();
         
-        this.gridOperator.startGame();
         time=LocalTime.now();
         timer.playFromStart();
     }

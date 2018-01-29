@@ -17,6 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import engine.IOnClickListener;
 import engine.IPieceInfo;
+import engine.IPlayer;
 /**
  *
  * @author jpereda
@@ -31,15 +32,15 @@ public class GridOperator implements IPieceInfo {
     private ReversiPiece[][] pieces;
     
     IOnClickListener onClickListener;
+    IPlayer iPlayer;
     
-    int player1_score,player2_score,current_player;
-
     
-    public GridOperator(int gridSize, IOnClickListener listener){
+    public GridOperator(int gridSize, IOnClickListener listener, IPlayer iPlayer){
         this.gridSize=gridSize;
         this.traversalX = IntStream.range(0, gridSize).boxed().collect(Collectors.toList());
         this.traversalY = IntStream.range(0, gridSize).boxed().collect(Collectors.toList());
         onClickListener=listener;
+        this.iPlayer=iPlayer;
     }
     
     public void sortGrid(Direction direction){
@@ -74,21 +75,10 @@ public class GridOperator implements IPieceInfo {
     }
     private ReversiPiece createCell(int row, int col, int CELL_SIZE){
         
-        return new ReversiPiece(0,row,col,CELL_SIZE,onClickListener);
+        return new ReversiPiece(0,row,col,CELL_SIZE,onClickListener,iPlayer );
     }
     
-    public void startGame()
-    {
-        pieces[3][3].setPiece(1);
-        pieces[4][4].setPiece(1);
 
-        pieces[3][4].setPiece(2);
-        pieces[4][3].setPiece(2);
-        player1_score = 2;
-        player2_score = 2;
-        
-        current_player = 2;
-    }
 
 	
 

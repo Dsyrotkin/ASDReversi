@@ -59,7 +59,7 @@ public class GameManager extends Group {
      */
     public GameManager(int gridSize) {
         
-        gridOperator=new GridOperator(gridSize,engine);
+        gridOperator=new GridOperator(gridSize,engine,engine);
         engine.setPiece(gridOperator);
     	
         board = new Board(gridOperator);
@@ -103,7 +103,7 @@ public class GameManager extends Group {
      * Starts the game by adding 1 or 2 tiles at random locations
      */
     private void startGame() {
-
+    	engine.startGame();
         board.startGame();
     }
     

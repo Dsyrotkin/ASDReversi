@@ -2,7 +2,7 @@ package engine;
 
 import UI.ReversiPiece;
 
-public class ReversiEngine implements IOnClickListener{
+public class ReversiEngine implements IOnClickListener,IPlayer{
 
     // the current player who is playing and who is his opposition
     private int current_player;
@@ -219,4 +219,21 @@ public class ReversiEngine implements IOnClickListener{
         return false;
     }
 
+    public void startGame()
+    {
+    	pieceInfo.setPiece(3, 3, 1);
+    	pieceInfo.setPiece(4, 4, 1);
+
+    	pieceInfo.setPiece(3,4,2);
+    	pieceInfo.setPiece(4,3,2);
+        player1_score = 2;
+        player2_score = 2;
+        
+        current_player = 2;
+        updateScores();
+    }
+	@Override
+	public int getCurrentPlayer() {
+		return current_player;
+	}
 }
