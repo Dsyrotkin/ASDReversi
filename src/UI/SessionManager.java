@@ -27,7 +27,7 @@ public class SessionManager {
         this.SESSION_PROPERTIES_FILENAME = "game2048_" + gridOperator.getGridSize() + ".properties";
     }
 
-    public void saveSession(Map<Location, Object> gameGrid, Integer score, Long time) {
+    public void saveSession(Integer score, Long time) {
         try {
 //            gridOperator.traverseGrid((x,y)->{
 //                Tile t = gameGrid.get(new Location(x, y));
@@ -43,7 +43,7 @@ public class SessionManager {
         }
     }
 
-    public int restoreSession(Map<Location, Object> gameGrid, StringProperty time) {
+    public int restoreSession(StringProperty time) {
         Reader reader = null;
         try {
             reader = new FileReader(SESSION_PROPERTIES_FILENAME);

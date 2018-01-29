@@ -42,9 +42,7 @@ public class GridOperator implements IPieceInfo {
         onClickListener=listener;
         this.iPlayer=iPlayer;
     }
-    
-    public void sortGrid(Direction direction){
-    }
+
     
     public int traverseGrid(IntBinaryOperator func) {
         AtomicInteger at = new AtomicInteger();
@@ -59,9 +57,7 @@ public class GridOperator implements IPieceInfo {
     
     public int getGridSize(){ return gridSize; }
     
-    public boolean isValidLocation(Location loc){
-        return loc.getX() >= 0 && loc.getX() < gridSize && loc.getY() >= 0 && loc.getY() < gridSize;
-    }
+
     
     public void create(Group group, int CELL_SIZE)
     {

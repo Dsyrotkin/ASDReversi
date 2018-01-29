@@ -601,8 +601,8 @@ public class Board extends Group implements IScoreListener{
     /*
     Once we have confirmation
     */
-    public void saveSession(Map<Location, Object> gameGrid) {
-        saveGame.set(false);
+    public void saveSession1() {
+    	saveGame.set(false);
         //sessionManager.saveSession(gameGrid, gameScoreProperty.getValue(), LocalTime.now().minusNanos(time.toNanoOfDay()).toNanoOfDay());
         keepGoing();
     }
@@ -617,7 +617,7 @@ public class Board extends Group implements IScoreListener{
     /*
     Once we have confirmation
     */
-    public boolean restoreSession(Map<Location, Object> gameGrid) {
+    public boolean restoreSession1() {
         timerPause.stop();
         restoreGame.set(false);
         doClearGame();
