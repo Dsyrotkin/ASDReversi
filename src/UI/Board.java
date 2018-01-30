@@ -273,12 +273,12 @@ public class Board extends Group implements IScoreListener{
         Platform.exit();
     }
     
-    private final Overlay wonListener= new Overlay("You win!","",bContinue, bTry, "game-overlay-won", "game-lblWon",true);
+    private Overlay wonListener= new Overlay("You win!","",bContinue, bTry, "game-overlay-pause", "game-lblPause",true);
 
     private class Overlay implements ChangeListener<Boolean> {
 
         private final Button btn1, btn2;
-        private final String message, warning;
+        private String message, warning;
         private final String style1, style2;
         private final boolean pause;
         
@@ -691,6 +691,12 @@ public class Board extends Group implements IScoreListener{
 			circle2.setStroke(select);
 		}
 			
+	}
+
+	@Override
+	public void setWinner(String info) {
+		wonListener.message=info;
+		setGameWin(true);
 	}
     
 }

@@ -44,7 +44,6 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
 	@Override
 	public void onClick(int row, int col) {
 		System.out.println("onclik "+row+","+col);	
-		
 		for (int i=0;i<pieceInfo.getRow();i++)
 		{
 			for (int j=0;j<pieceInfo.getRow();j++)			
@@ -202,14 +201,14 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
         	str="No winner\r\nWhite: "+player1_score+"\r\nBlack: "+player2_score;
         	System.out.println("No winner");
         }
-        
+        scoreListener.setWinner(str);
         
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Information Dialog");
         alert.setHeaderText(null);
         alert.setContentText(str);
 
-        alert.showAndWait();
+        //alert.showAndWait();
     }
     // private method for swapping the players
     private void swapPlayers() {
