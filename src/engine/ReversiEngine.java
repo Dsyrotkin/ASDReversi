@@ -1,6 +1,8 @@
 package engine;
 
 import UI.ReversiPiece;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class ReversiEngine implements IOnClickListener,IPlayer{
 
@@ -173,9 +175,30 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
     }
     // private method that determines who won the game
     private void determineWinner() {
-        if(player1_score > player2_score) System.out.println("Player 1 is winner");
-        else if(player2_score > player1_score) System.out.println("Player 2 is winner");
-        else System.out.println("No winner");
+    	String str="";
+        if(player1_score > player2_score)
+        {
+        	System.out.println("Player 1 is winner");
+        	str="White wins\r\nWhite: "+player1_score+"\r\nBlack: "+player2_score;
+        }
+        else if(player2_score > player1_score) 
+        {
+        	System.out.println("Player 2 is winner");
+        	str="Black wins\r\nWhite: "+player1_score+"\r\nBlack: "+player2_score;
+        }
+        else 
+        {
+        	str="No winner\r\nWhite: "+player1_score+"\r\nBlack: "+player2_score;
+        	System.out.println("No winner");
+        }
+        
+        
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText(str);
+
+        alert.showAndWait();
     }
     // private method for swapping the players
     private void swapPlayers() {
