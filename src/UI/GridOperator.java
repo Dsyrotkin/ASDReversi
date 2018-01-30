@@ -1,58 +1,51 @@
 package UI;
 
-import java.util.Collections;
+import engine.IOnClickListener;
+import engine.IPieceInfo;
+import engine.IPlayer;
+import javafx.scene.Group;
+
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntBinaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import com.sun.javafx.geom.Shape;
-
-
-import javafx.event.EventHandler;
-import javafx.scene.Group;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import engine.IOnClickListener;
-import engine.IPieceInfo;
-import engine.IPlayer;
 /**
  *
  * @author jpereda
  */
 public class GridOperator implements IPieceInfo {
     
+    private final int gridSize;
+    private final List<Integer> traversalX;
+    private final List<Integer> traversalY;
 
-    private int gridSize;
-
-    
     private ReversiPiece[][] pieces;
     
     IOnClickListener onClickListener;
     IPlayer iPlayer;
-    
-    
+
     public GridOperator(int gridSize, IOnClickListener listener, IPlayer iPlayer){
         this.gridSize=gridSize;
-        onClickListener=listener;
+        this.traversalX = IntStream.range(0, gridSize).boxed().collect(Collectors.toList());
+        this.traversalY = IntStream.range(0, gridSize).boxed().collect(Collectors.toList());
+        this.onClickListener=listener;
         this.iPlayer=iPlayer;
     }
 
-    
-    public void traverseGrid(int player) {
-    	for (ReversiPiece[] row: pieces)
-    		for (ReversiPiece p: row)
-    		{
-    			p.setPiece(player);
-    		}
+    public int traverseGrid(IntBinaryOperator func) {
+        AtomicInteger at = new AtomicInteger();
+        traversalX.forEach(t_x -> {
+            traversalY.forEach(t_y -> {
+                at.addAndGet(func.applyAsInt(t_x, t_y));
+            });
+        });
+
+        return at.get();
     }
     
     public int getGridSize(){ return gridSize; }
-    
 
-    
     public void create(Group group, int CELL_SIZE)
     {
     	pieces=new ReversiPiece[gridSize][gridSize];
@@ -63,11 +56,11 @@ public class GridOperator implements IPieceInfo {
     			group.getChildren().add(pieces[i][j]);
     		}
     }
+
     private ReversiPiece createCell(int row, int col, int CELL_SIZE){
         
         return new ReversiPiece(0,row,col,CELL_SIZE,onClickListener,iPlayer );
     }
-    
 
 	@Override
 	public int getRow() {

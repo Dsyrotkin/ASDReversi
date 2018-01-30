@@ -37,7 +37,7 @@ import javafx.util.Duration;
 public class GameManager extends Group {
 
     public static final int DEFAULT_GRID_SIZE=8;
-    
+
 
 
     private final Board board;
@@ -61,7 +61,7 @@ public class GameManager extends Group {
         
         gridOperator=new GridOperator(gridSize,engine,engine);
         engine.setPiece(gridOperator);
-    	
+
         board = new Board(gridOperator);
         engine.addScoreObserver(board);
         

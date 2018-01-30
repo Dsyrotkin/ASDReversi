@@ -23,6 +23,10 @@ public class ReversiEngine extends ScoreSubject implements IOnClickListener,IPla
     
     IPieceInfo pieceInfo;
     
+
+    private int gridsSize = 0;
+    
+
     public ReversiEngine()
     {
     	current_player = 2;
@@ -35,8 +39,15 @@ public class ReversiEngine extends ScoreSubject implements IOnClickListener,IPla
     	this.pieceInfo=pieceInfo;
     }
 
+
     
-	@Override
+
+
+    public void setGridsSize(int gridsSize) {
+        this.gridsSize = gridsSize;
+    }
+
+    @Override
 	public void onClick(int row, int col) {
 		System.out.println("onclik "+row+","+col);	
 		placePiece(row,col);
@@ -215,8 +226,8 @@ public class ReversiEngine extends ScoreSubject implements IOnClickListener,IPla
     // private method for updating the player scores
     private void updateScores() {
         player1_score = player2_score = 0;
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
+        for(int i = 0; i < gridsSize; i++)
+            for(int j = 0; j < gridsSize; j++)
                 switch(pieceInfo.getPiece(i, j)) {
                     case 1:
                         player1_score++;
