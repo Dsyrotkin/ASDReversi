@@ -5,7 +5,7 @@ import UI.ReversiPiece;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
-public class ReversiEngine implements IOnClickListener,IPlayer{
+public class ReversiEngine extends ScoreSubject implements IOnClickListener,IPlayer{
 
     // the current player who is playing and who is his opposition
     private int current_player;
@@ -23,8 +23,6 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
     
     IPieceInfo pieceInfo;
     
-    IScoreListener scoreListener;
-    
     public ReversiEngine()
     {
     	current_player = 2;
@@ -36,10 +34,7 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
     {
     	this.pieceInfo=pieceInfo;
     }
-    public void setScoreListener(IScoreListener scoreListener)
-    {
-    	this.scoreListener=scoreListener;
-    }
+
     
 	@Override
 	public void onClick(int row, int col) {
@@ -201,7 +196,7 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
         	str="No winner\r\nWhite: "+player1_score+"\r\nBlack: "+player2_score;
         	System.out.println("No winner");
         }
-        scoreListener.setWinner(str);
+        notifyWinner(str);
         
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Information Dialog");
@@ -230,7 +225,7 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
                         player2_score++;
                         break;
                 }
-        scoreListener.update(this.current_player, player1_score, player2_score);
+        super.notifyScore(this.current_player, player1_score, player2_score);
     }
     // private method that will determine if the end of the game has been reached
     private void determineEndGame() {
