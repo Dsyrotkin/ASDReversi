@@ -61,6 +61,7 @@ public class GameManager extends Group {
         
         gridOperator=new GridOperator(gridSize,engine,engine);
         engine.setPiece(gridOperator);
+        engine.setGridsSize(DEFAULT_GRID_SIZE);
 
         board = new Board(gridOperator);
         engine.setScoreListener(board);
@@ -96,7 +97,7 @@ public class GameManager extends Group {
      * Initializes all cells in gameGrid map to null
      */
     private void initializeGameGrid() {
-        
+
     }
 
     /**
