@@ -41,8 +41,12 @@ public class GridOperator implements IPieceInfo {
     }
 
     
-    public void traverseGrid(IntBinaryOperator func) {
-        
+    public void traverseGrid(int player) {
+    	for (ReversiPiece[] row: pieces)
+    		for (ReversiPiece p: row)
+    		{
+    			p.setPiece(player);
+    		}
     }
     
     public int getGridSize(){ return gridSize; }
