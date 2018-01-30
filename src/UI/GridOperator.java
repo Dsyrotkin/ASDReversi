@@ -33,15 +33,13 @@ public class GridOperator implements IPieceInfo {
         this.iPlayer=iPlayer;
     }
 
-    public int traverseGrid(IntBinaryOperator func) {
-        AtomicInteger at = new AtomicInteger();
-        traversalX.forEach(t_x -> {
-            traversalY.forEach(t_y -> {
-                at.addAndGet(func.applyAsInt(t_x, t_y));
-            });
-        });
+    public void traverseGrid(int player) {
+    	for (ReversiPiece[] row: pieces)
+    		for (ReversiPiece p: row)
+    		{
+    			p.setPiece(player);
+    		}
 
-        return at.get();
     }
     
     public int getGridSize(){ return gridSize; }
