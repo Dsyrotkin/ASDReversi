@@ -7,7 +7,7 @@ import java.util.Map;
 
 import application.Reversi;
 import engine.IOnClickListener;
-import engine.IScoreListener;
+import engine.ScoreObserver;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -50,7 +50,7 @@ import javafx.util.Duration;
  *
  * @author jpereda
  */
-public class Board extends Group implements IScoreListener{
+public class Board extends Group implements ScoreObserver{
     public static final int CELL_SIZE = 64;
     private static final int BORDER_WIDTH = (14 + 2) / 2;
     private static final int TOP_HEIGHT = 92;
@@ -672,7 +672,7 @@ public class Board extends Group implements IScoreListener{
     }
 
 	@Override
-	public void update(int currentplayer,int score1, int score2) {
+	public void updateScore(int currentplayer,int score1, int score2) {
 		// TODO Auto-generated method stub
 		lblScore1.setText(String.valueOf(score1));
 		lblScore2.setText(String.valueOf(score2));
@@ -694,9 +694,11 @@ public class Board extends Group implements IScoreListener{
 	}
 
 	@Override
-	public void setWinner(String info) {
+	public void updateWinner(String info) {
 		wonListener.message=info;
 		setGameWin(true);
 	}
+
+
     
 }

@@ -5,7 +5,7 @@ import UI.ReversiPiece;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
-public class ReversiEngine implements IOnClickListener,IPlayer{
+public class ReversiEngine extends ScoreSubject implements IOnClickListener,IPlayer{
 
     // the current player who is playing and who is his opposition
     private int current_player;
@@ -23,9 +23,10 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
     
     IPieceInfo pieceInfo;
     
-    IScoreListener scoreListener;
+
     private int gridsSize = 0;
     
+
     public ReversiEngine()
     {
     	current_player = 2;
@@ -37,10 +38,10 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
     {
     	this.pieceInfo=pieceInfo;
     }
-    public void setScoreListener(IScoreListener scoreListener)
-    {
-    	this.scoreListener=scoreListener;
-    }
+
+
+    
+
 
     public void setGridsSize(int gridsSize) {
         this.gridsSize = gridsSize;
@@ -49,13 +50,6 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
     @Override
 	public void onClick(int row, int col) {
 		System.out.println("onclik "+row+","+col);	
-		for (int i=0;i<pieceInfo.getRow();i++)
-		{
-			for (int j=0;j<pieceInfo.getRow();j++)			
-				System.out.print(pieceInfo.getPiece(i, j)+", ");
-			System.out.println();
-		}
-		
 		placePiece(row,col);
 	}
 
@@ -71,6 +65,13 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
         	pieceInfo.setPiece(cellx, celly, current_player);
         else
         	return;
+        
+        for (int i=0;i<pieceInfo.getRow();i++)
+		{
+			for (int j=0;j<pieceInfo.getRow();j++)			
+				System.out.print(pieceInfo.getPiece(i, j)+", ");
+			System.out.println();
+		}
 
         // determine what pieces surround the current piece. if there is no opposing
         // pieces then a valid move cannot be made.
@@ -206,7 +207,7 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
         	str="No winner\r\nWhite: "+player1_score+"\r\nBlack: "+player2_score;
         	System.out.println("No winner");
         }
-        scoreListener.setWinner(str);
+        notifyWinner(str);
         
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Information Dialog");
@@ -235,7 +236,7 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
                         player2_score++;
                         break;
                 }
-        scoreListener.update(this.current_player, player1_score, player2_score);
+        super.notifyScore(this.current_player, player1_score, player2_score);
     }
     // private method that will determine if the end of the game has been reached
     private void determineEndGame() {
@@ -265,6 +266,7 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
 
     public void startGame()
     {
+    	in_play=true;
     	pieceInfo.setPiece(3, 3, 1);
     	pieceInfo.setPiece(4, 4, 1);
 
