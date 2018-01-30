@@ -55,7 +55,9 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
 
         int currentpiece=pieceInfo.getPiece(cellx, celly);
         if (currentpiece==0)
-        	pieceInfo.setPiece(cellx, celly, current_player);    	
+        	pieceInfo.setPiece(cellx, celly, current_player);
+        else
+        	return;
 
         // determine what pieces surround the current piece. if there is no opposing
         // pieces then a valid move cannot be made.
