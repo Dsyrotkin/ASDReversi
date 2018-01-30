@@ -44,13 +44,6 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
 	@Override
 	public void onClick(int row, int col) {
 		System.out.println("onclik "+row+","+col);	
-		for (int i=0;i<pieceInfo.getRow();i++)
-		{
-			for (int j=0;j<pieceInfo.getRow();j++)			
-				System.out.print(pieceInfo.getPiece(i, j)+", ");
-			System.out.println();
-		}
-		
 		placePiece(row,col);
 	}
 
@@ -66,6 +59,13 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
         	pieceInfo.setPiece(cellx, celly, current_player);
         else
         	return;
+        
+        for (int i=0;i<pieceInfo.getRow();i++)
+		{
+			for (int j=0;j<pieceInfo.getRow();j++)			
+				System.out.print(pieceInfo.getPiece(i, j)+", ");
+			System.out.println();
+		}
 
         // determine what pieces surround the current piece. if there is no opposing
         // pieces then a valid move cannot be made.
@@ -260,6 +260,7 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
 
     public void startGame()
     {
+    	in_play=true;
     	pieceInfo.setPiece(3, 3, 1);
     	pieceInfo.setPiece(4, 4, 1);
 
