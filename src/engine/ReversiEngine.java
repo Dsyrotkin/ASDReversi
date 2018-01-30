@@ -24,6 +24,7 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
     IPieceInfo pieceInfo;
     
     IScoreListener scoreListener;
+    private int gridsSize = 0;
     
     public ReversiEngine()
     {
@@ -40,8 +41,12 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
     {
     	this.scoreListener=scoreListener;
     }
-    
-	@Override
+
+    public void setGridsSize(int gridsSize) {
+        this.gridsSize = gridsSize;
+    }
+
+    @Override
 	public void onClick(int row, int col) {
 		System.out.println("onclik "+row+","+col);	
 		for (int i=0;i<pieceInfo.getRow();i++)
@@ -220,8 +225,8 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
     // private method for updating the player scores
     private void updateScores() {
         player1_score = player2_score = 0;
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
+        for(int i = 0; i < gridsSize; i++)
+            for(int j = 0; j < gridsSize; j++)
                 switch(pieceInfo.getPiece(i, j)) {
                     case 1:
                         player1_score++;

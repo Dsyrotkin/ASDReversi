@@ -4,6 +4,7 @@ import engine.IOnClickListener;
 import engine.IPlayer;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
@@ -17,47 +18,65 @@ import javafx.scene.transform.Translate;
 //class definition for a reversi piece
 public class ReversiPiece extends Group {
 	int row,col;
-	
+    private int player;		// the player that this piece belongs to
+    private Ellipse piece;	// ellipse representing the player's piece
+    private Translate t;	// translation for the player piece
+    private Rectangle cell;
+
     // default constructor for the class
     public ReversiPiece(int player, int row, int col, int CELL_SIZE, 
     		IOnClickListener listener, IPlayer iPlayer) {
     	
     	this.row=row;
         this.col=col;
-        
+
         createEclipse(CELL_SIZE,listener,iPlayer);
         
         setPiece(player);
-        
-        getChildren().add(createCell(CELL_SIZE));
+
+        getChildren().add(createCell(CELL_SIZE,listener));
         getChildren().add(piece);
-        
+        this.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                listener.onClick(row,col);
+            }
+        });
+
     }
+
     private void createEclipse(int CELL_SIZE, 
     		IOnClickListener listener, IPlayer iPlayer){
         t = new Translate();
         piece = new Ellipse();
         resize(CELL_SIZE,CELL_SIZE);
-        piece.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        /*piece.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
             	
                 listener.onClick(row, col);
             }
-        });
+        });*/
         
         piece.getTransforms().add(t);
         
     }
-    private Rectangle createCell(int CELL_SIZE){
+    private Rectangle createCell(int CELL_SIZE, IOnClickListener listener){
         final double arcSize = CELL_SIZE / 6d;
-        Rectangle cell = new Rectangle(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        cell = new Rectangle(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
         // provide default style in case css are not loaded
         cell.setFill(Color.WHITE);
         cell.setStroke(Color.GREY);
         cell.setArcHeight(arcSize);
         cell.setArcWidth(arcSize);
         cell.getStyleClass().add("game-grid-cell");
+
+        /*cell.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                listener.onClick(1,2);
+            }
+        });*/
         
         return cell;
     }
@@ -76,13 +95,13 @@ public class ReversiPiece extends Group {
         
     }
 
-    // overridden version of the relocate method to position the piece correctly
+    /*// overridden version of the relocate method to position the piece correctly
     @Override
     public void relocate(double x, double y) {
         super.relocate(x, y);
         t.setX(x);
         t.setY(y);
-    }
+    }*/
 
     // public method that will swap the colour and type of this piece
     public void swapPiece() {
@@ -94,6 +113,7 @@ public class ReversiPiece extends Group {
 
     // method that will set the piece type
     public void setPiece(final int type) {
+
         player = type;
 
         switch(type) {
@@ -107,6 +127,7 @@ public class ReversiPiece extends Group {
                 piece.setFill(Color.BLACK);
                 break;
         }
+
     }
 
     // returns the type of this piece
@@ -114,8 +135,5 @@ public class ReversiPiece extends Group {
         return player;
     }
 
-    // private fields
-    private int player;		// the player that this piece belongs to
-    private Ellipse piece;	// ellipse representing the player's piece
-    private Translate t;	// translation for the player piece
+
 }
