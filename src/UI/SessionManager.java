@@ -62,16 +62,6 @@ public class SessionManager {
             }
         }
 
-        gridOperator.traverseGrid((x,y)->{
-            String val = props.getProperty("Location_" + x + "_" + y);
-            if (!val.equals("0")) {
-//                Tile t = Tile.newTile(new Integer(val));
-//                Location l = new Location(x, y);
-//                t.setLocation(l);
-//                gameGrid.put(l, t);
-            }
-            return 0;
-        });
 
         time.set(props.getProperty("time"));
 

@@ -484,6 +484,7 @@ public class Board extends Group implements IScoreListener{
         saveRecord();
         getChildren().removeAll(overlay, buttonsOverlay);
         
+        gridOperator.traverseGrid(0);
         clearGame.set(false);
         resetGame.set(false);
         restoreGame.set(false);

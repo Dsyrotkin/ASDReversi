@@ -25,9 +25,8 @@ import engine.IPlayer;
 public class GridOperator implements IPieceInfo {
     
 
-    private final int gridSize;
-    private final List<Integer> traversalX;
-    private final List<Integer> traversalY;
+    private int gridSize;
+
     
     private ReversiPiece[][] pieces;
     
@@ -37,22 +36,17 @@ public class GridOperator implements IPieceInfo {
     
     public GridOperator(int gridSize, IOnClickListener listener, IPlayer iPlayer){
         this.gridSize=gridSize;
-        this.traversalX = IntStream.range(0, gridSize).boxed().collect(Collectors.toList());
-        this.traversalY = IntStream.range(0, gridSize).boxed().collect(Collectors.toList());
         onClickListener=listener;
         this.iPlayer=iPlayer;
     }
 
     
-    public int traverseGrid(IntBinaryOperator func) {
-        AtomicInteger at = new AtomicInteger();
-        traversalX.forEach(t_x -> {
-            traversalY.forEach(t_y -> {
-                at.addAndGet(func.applyAsInt(t_x, t_y));
-            });
-        });
-
-        return at.get();
+    public void traverseGrid(int player) {
+    	for (ReversiPiece[] row: pieces)
+    		for (ReversiPiece p: row)
+    		{
+    			p.setPiece(player);
+    		}
     }
     
     public int getGridSize(){ return gridSize; }

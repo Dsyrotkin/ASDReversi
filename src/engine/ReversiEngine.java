@@ -1,5 +1,6 @@
 package engine;
 
+import UI.GridOperator;
 import UI.ReversiPiece;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -42,7 +43,15 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
     
 	@Override
 	public void onClick(int row, int col) {
-		System.out.println("onclik "+row+","+col);		
+		System.out.println("onclik "+row+","+col);	
+		
+		for (int i=0;i<pieceInfo.getRow();i++)
+		{
+			for (int j=0;j<pieceInfo.getRow();j++)			
+				System.out.print(pieceInfo.getPiece(i, j)+", ");
+			System.out.println();
+		}
+		
 		placePiece(row,col);
 	}
 
@@ -261,6 +270,7 @@ public class ReversiEngine implements IOnClickListener,IPlayer{
         player2_score = 2;
         
         current_player = 2;
+        opposing = 1;
         updateScores();
     }
 	@Override
