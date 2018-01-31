@@ -1,4 +1,4 @@
-package engine;
+package framework;
 
 public class ReversiPieceRule implements IRule {
 

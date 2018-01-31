@@ -1,4 +1,4 @@
-package engine;
+package framework;
 
 public interface IRule {
     boolean validateMove(Move from, Move to);

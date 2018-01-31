@@ -61,7 +61,7 @@ public class GameManager extends Group {
         
         gridOperator=new GridOperator(gridSize,engine,engine);
         engine.setPiece(gridOperator);
-        engine.setGridsSize(DEFAULT_GRID_SIZE);
+        engine.setGridsSize(gridSize);
 
         board = new Board(gridOperator);
         engine.addScoreObserver(board);

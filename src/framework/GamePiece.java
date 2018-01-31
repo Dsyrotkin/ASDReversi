@@ -1,4 +1,6 @@
-package engine;
+package framework;
+
+import framework.playerFactory.Player;
 
 public interface GamePiece {
 
@@ -16,5 +18,5 @@ public interface GamePiece {
 
     void clearCell();
 
-    public void addOnMouseClickListener(IOnClickListener listener);
+    void addMoveListener(IMoveListener listener);
 }

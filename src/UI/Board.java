@@ -268,6 +268,7 @@ public class Board extends Group implements ScoreObserver{
         gameQuitProperty.set(false);
         timer.play();
     }
+
     private void quit() {
         timerPause.stop();
         Platform.exit();
@@ -532,10 +533,6 @@ public class Board extends Group implements ScoreObserver{
 
         timeline.play();
     }
-    
-
-    
-
     
     public Group getGridGroup() {
         return gridGroup;

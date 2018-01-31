@@ -1,10 +1,10 @@
-package engine;
+package framework;
 
 public class Move {
 
     int x = 0, y = 0;
 
-    IPieceInfo pieceInfo;
+    private IPieceInfo pieceInfo;
 
     public Move(int x, int y){
         this.x = x;
