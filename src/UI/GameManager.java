@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import engine.ReversiEngine;
+import framework.GameBoardDirector;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -38,6 +39,7 @@ public class GameManager extends Group {
 
     public static final int DEFAULT_GRID_SIZE=8;
 
+    
 
 
     private final Board board;
@@ -63,7 +65,9 @@ public class GameManager extends Group {
         engine.setPiece(gridOperator);
         engine.setGridsSize(gridSize);
 
-        board = new Board(gridOperator);
+        GameBoardDirector director=new GameBoardDirector(new ReversiBoardBuilder(this,gridOperator));
+        director.constructBoard();
+        board = (Board)director.getBoard();//new Board(gridOperator);
         engine.addScoreObserver(board);
         
         this.getChildren().add(board);
@@ -186,7 +190,7 @@ public class GameManager extends Group {
     }
     
     public void setToolBar(HBox toolbar){
-        board.setToolBar(toolbar);
+       // board.setToolBar(toolbar);
     }
     
     public void setHostServices(HostServices hostServices){

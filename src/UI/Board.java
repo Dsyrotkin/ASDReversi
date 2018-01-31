@@ -121,8 +121,8 @@ public class Board extends Group implements ScoreObserver,GameBoard{
         gridWidth = CELL_SIZE * grid.getGridSize() + BORDER_WIDTH * 2;
         sessionManager = new SessionManager(gridOperator);
         
-        createScore();
-        createGrid();
+        //createScore();
+        //createGrid();
         
         initGameProperties();
     }

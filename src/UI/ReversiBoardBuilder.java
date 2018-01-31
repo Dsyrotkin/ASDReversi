@@ -15,10 +15,10 @@ public class ReversiBoardBuilder implements GameBoardBuilder {
 	GameManager manager;
 	Board board;
 	
-	public ReversiBoardBuilder(GameManager manager)
+	public ReversiBoardBuilder(GameManager manager, GridOperator grid)
 	{
 		this.manager=manager;
-		board=new Board(null);
+		board=new Board(grid);
 	}
 	@Override
 	public void createToolBar() {
