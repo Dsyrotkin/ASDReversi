@@ -19,7 +19,6 @@ public class GamePane extends StackPane {
     
 	public GamePane() {
         gameManager = new GameManager();
-        gameManager.setToolBar(createToolBar());
         gameBounds = gameManager.getLayoutBounds();
 
         getChildren().add(gameManager);
@@ -40,20 +39,7 @@ public class GamePane extends StackPane {
         this.setOnMouseClicked(e -> requestFocus());
     }
 	
-	private HBox createToolBar(){
-        HBox toolbar=new HBox();    
-        toolbar.setAlignment(Pos.CENTER);
-        toolbar.setPadding(new Insets(10.0));
-        Button btItem1 = createButtonItem("mSave", "Save Session", t->gameManager.saveSession());
-        Button btItem2 = createButtonItem("mRestore", "Restore Session", t->gameManager.restoreSession());
-        Button btItem3 = createButtonItem("mPause", "Pause Game", t->gameManager.pauseGame());
-        Button btItem4 = createButtonItem("mReplay", "Try Again", t->gameManager.tryAgain());
-        Button btItem5 = createButtonItem("mInfo", "About the Game", t->gameManager.aboutGame());
-        toolbar.getChildren().setAll(btItem1, btItem2, btItem3, btItem4, btItem5);
-        Button btItem6 = createButtonItem("mQuit", "Quit Game", t->gameManager.quitGame());
-        toolbar.getChildren().add(btItem6);
-        return toolbar;
-    }
+
 	
 	private Button createButtonItem(String symbol, String text, EventHandler<ActionEvent> t){
         Button g=new Button();

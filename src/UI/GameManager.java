@@ -188,10 +188,7 @@ public class GameManager extends Group {
     public void aboutGame() {
         board.aboutGame();
     }
-    
-    public void setToolBar(HBox toolbar){
-       // board.setToolBar(toolbar);
-    }
+
     
     public void setHostServices(HostServices hostServices){
         board.setHostServices(hostServices);
