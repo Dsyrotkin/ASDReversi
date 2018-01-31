@@ -8,6 +8,8 @@ import java.util.Map;
 import application.Reversi;
 import engine.IOnClickListener;
 import engine.ScoreObserver;
+import framework.GameBoard;
+import framework.playerFactory.Player;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -50,7 +52,7 @@ import javafx.util.Duration;
  *
  * @author jpereda
  */
-public class Board extends Group implements ScoreObserver{
+public class Board extends Group implements ScoreObserver,GameBoard{
     public static final int CELL_SIZE = 64;
     private static final int BORDER_WIDTH = (14 + 2) / 2;
     private static final int TOP_HEIGHT = 92;
@@ -124,8 +126,8 @@ public class Board extends Group implements ScoreObserver{
         
         initGameProperties();
     }
-    
-    private void createScore() {
+
+    public void createScore() {
         Label lblSubtitle = new Label("Reversi");
         lblSubtitle.getStyleClass().addAll("game-label","game-subtitle");
         HBox hFill = new HBox();
@@ -196,13 +198,10 @@ public class Board extends Group implements ScoreObserver{
     
 
     
-    private void createGrid() {
+    public void createGrid() {
         
     	gridOperator.create(gridGroup, CELL_SIZE);
-//        gridOperator.traverseGrid((i,j)->{
-//            gridGroup.getChildren().add(createCell(i, j));
-//            return 0;
-//        });
+
 
         gridGroup.getStyleClass().add("game-grid");
         gridGroup.setManaged(false);
@@ -694,6 +693,12 @@ public class Board extends Group implements ScoreObserver{
 	public void updateWinner(String info) {
 		wonListener.message=info;
 		setGameWin(true);
+	}
+
+	@Override
+	public void updateScore(Player currentPlayer, int score1, int score2) {
+		// TODO Auto-generated method stub
+		
 	}
 
 
