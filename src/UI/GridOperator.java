@@ -52,9 +52,11 @@ public class GridOperator implements IPieceInfo {
 		}
 	}
 
-    public void saveState(GameState gameState) {
-		gameState.setPieces(pieces);
-		gameState.setCurrentPlayer(iPlayer.getCurrentPlayer());
+    public GameState getCurrentState() {
+    	GameState state = new GameState();
+		state.setPieces(pieces);
+		state.setCurrentPlayer(iPlayer.getCurrentPlayer());
+		return state;
 	}
     
     public int getGridSize(){ return gridSize; }

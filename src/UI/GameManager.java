@@ -19,7 +19,7 @@ public class GameManager extends Group {
 
     private final Board board;
     private final GridOperator gridOperator;
-    private GameState savedState;
+    private RecordManager recordManager = new RecordManager();
     ReversiEngine engine=new ReversiEngine();
 
     public GameManager() {
@@ -130,8 +130,8 @@ public class GameManager extends Group {
      * Save the game to a properties file, without confirmation
      */
     private void doSaveSession() {
-        savedState = new GameState();
-        gridOperator.saveState(savedState);
+        GameState currentState = gridOperator.getCurrentState();
+        recordManager.saveRecordToFile(currentState);
     }
 
     /** 
@@ -145,9 +145,12 @@ public class GameManager extends Group {
      * Restore the game from a properties file, without confirmation
      */
     private void doRestoreSession() {
-        gridOperator.restoreGridState(savedState.getPieces());
-        if(savedState.getCurrentPlayer() != engine.getCurrentPlayer()) engine.swapPlayers();
-        engine.updateScores();
+        GameState savedState = recordManager.getSavedRecord();
+        if(savedState != null) {
+            gridOperator.restoreGridState(savedState.getPieces());
+            if (savedState.getCurrentPlayer() != engine.getCurrentPlayer()) engine.swapPlayers();
+            engine.updateScores();
+        }
     }
 
     /**
