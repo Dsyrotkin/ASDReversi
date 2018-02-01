@@ -215,15 +215,16 @@ public class ReversiEngine extends ScoreSubject implements IOnClickListener,IPla
 
         //alert.showAndWait();
     }
-    // private method for swapping the players
-    private void swapPlayers() {
+
+    // public method for swapping the players
+    public void swapPlayers() {
         int temp = opposing;
         opposing = current_player;
         current_player = temp;
     }
 
-    // private method for updating the player scores
-    private void updateScores() {
+    // public method for updating the player scores
+    public void updateScores() {
         player1_score = player2_score = 0;
         for(int i = 0; i < gridsSize; i++)
             for(int j = 0; j < gridsSize; j++)

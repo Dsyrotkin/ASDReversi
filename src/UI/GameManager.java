@@ -19,6 +19,7 @@ public class GameManager extends Group {
 
     private final Board board;
     private final GridOperator gridOperator;
+    private GameState savedState;
     ReversiEngine engine=new ReversiEngine();
 
     public GameManager() {
@@ -129,7 +130,8 @@ public class GameManager extends Group {
      * Save the game to a properties file, without confirmation
      */
     private void doSaveSession() {
-       // board.saveSession(gameGrid);
+        savedState = new GameState();
+        gridOperator.saveState(savedState);
     }
 
     /** 
@@ -143,10 +145,9 @@ public class GameManager extends Group {
      * Restore the game from a properties file, without confirmation
      */
     private void doRestoreSession() {
-        initializeGameGrid();
-//        if (board.restoreSession(gameGrid)) {
-//            redrawTilesInGameGrid();
-//        }
+        gridOperator.restoreGridState(savedState.getPieces());
+        if(savedState.getCurrentPlayer() != engine.getCurrentPlayer()) engine.swapPlayers();
+        engine.updateScores();
     }
 
     /**
