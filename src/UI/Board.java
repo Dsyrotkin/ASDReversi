@@ -46,7 +46,7 @@ import javafx.util.Duration;
  *
  * @author jpereda
  */
-public class Board extends Group implements ScoreObserver,GameBoard{
+public class Board extends Group implements GameBoard{
     public static final int CELL_SIZE = 64;
     private static final int BORDER_WIDTH = (14 + 2) / 2;
     private static final int TOP_HEIGHT = 92;
@@ -689,11 +689,6 @@ public class Board extends Group implements ScoreObserver,GameBoard{
 		setGameWin(true);
 	}
 
-	@Override
-	public void updateScore(Player currentPlayer, int score1, int score2) {
-		// TODO Auto-generated method stub
-		
-	}
 
 
     
