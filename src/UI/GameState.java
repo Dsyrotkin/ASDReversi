@@ -1,9 +1,11 @@
 package UI;
 
+import java.io.Serializable;
+
 /**
  * Created by Dmitry on 1/31/2018.
  */
-public class GameState {
+public class GameState implements Serializable {
     private int[][] savedPieces;
     private int currentPlayer;
 
