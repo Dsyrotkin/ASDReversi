@@ -249,6 +249,22 @@ public class Board extends Group implements ScoreObserver,GameBoard{
         layerOnProperty.set(false);
         doResetGame();
     }
+
+    private void btnSaveState() {
+        timerPause.stop();
+        layerOnProperty.set(false);
+        saveGame.set(true);
+        gameSaveProperty.setValue(false);
+        saveGame.set(false);
+    }
+
+    private void btnRestoreState() {
+        timerPause.stop();
+        layerOnProperty.set(false);
+        restoreGame.set(true);
+        gameRestoreProperty.setValue(false);
+        restoreGame.set(false);
+    }
     
     private void keepGoing(){
         timerPause.stop();
@@ -353,20 +369,20 @@ public class Board extends Group implements ScoreObserver,GameBoard{
         });
         
         bSave.getStyleClass().add("game-button");
-        bSave.setOnTouchPressed(e -> saveGame.set(true));
-        bSave.setOnMouseClicked(e -> saveGame.set(true));
+        bSave.setOnTouchPressed(e -> btnSaveState());
+        bSave.setOnMouseClicked(e -> btnSaveState());
         bSave.setOnKeyPressed(e->{
             if(e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.SPACE)){
-                saveGame.set(true);
+                btnSaveState();
             }
         });
 
         bRestore.getStyleClass().add("game-button");
-        bRestore.setOnTouchPressed(e -> restoreGame.set(true));
-        bRestore.setOnMouseClicked(e -> restoreGame.set(true));
+        bRestore.setOnTouchPressed(e -> btnRestoreState());
+        bRestore.setOnMouseClicked(e -> btnRestoreState());
         bRestore.setOnKeyPressed(e->{
             if(e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.SPACE)){
-                restoreGame.set(true);
+                btnRestoreState();
             }
         });
 

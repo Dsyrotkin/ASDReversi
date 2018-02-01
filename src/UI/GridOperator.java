@@ -3,6 +3,8 @@ package UI;
 import engine.IOnClickListener;
 import engine.IPieceInfo;
 import engine.IPlayer;
+import engine.ReversiEngine;
+import framework.GameEngine;
 import javafx.scene.Group;
 
 import java.util.List;
@@ -41,6 +43,19 @@ public class GridOperator implements IPieceInfo {
     		}
 
     }
+
+    public void restoreGridState(int[][] savedPieces) {
+		for (int i = 0; i < savedPieces.length; i++) {
+			for(int j = 0; j < savedPieces[i].length; j++) {
+				setPiece(i, j, savedPieces[i][j]);
+			}
+		}
+	}
+
+    public void saveState(GameState gameState) {
+		gameState.setPieces(pieces);
+		gameState.setCurrentPlayer(iPlayer.getCurrentPlayer());
+	}
     
     public int getGridSize(){ return gridSize; }
 
