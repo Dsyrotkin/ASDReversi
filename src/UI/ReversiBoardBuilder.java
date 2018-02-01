@@ -1,7 +1,7 @@
 package UI;
 
-import framework.GameBoard;
-import framework.GameBoardBuilder;
+import framework.board.GameBoard;
+import framework.board.builder.GameBoardBuilder;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;

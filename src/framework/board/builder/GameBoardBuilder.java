@@ -1,4 +1,6 @@
-package framework;
+package framework.board.builder;
+
+import framework.board.GameBoard;
 
 public interface GameBoardBuilder {
 	

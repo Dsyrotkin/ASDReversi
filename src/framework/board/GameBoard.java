@@ -1,6 +1,6 @@
-package framework;
+package framework.board;
 
-import framework.playerFactory.Player;
+import framework.player.factory.Player;
 
 public interface GameBoard {
 

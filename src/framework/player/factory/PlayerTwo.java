@@ -1,4 +1,4 @@
-package framework.playerFactory;
+package framework.player.factory;
 
 public class PlayerTwo extends Player {
 

@@ -1,6 +1,9 @@
-package framework;
+package framework.piece;
 
-import framework.playerFactory.Player;
+import framework.IMoveListener;
+import framework.IMoveOutcome;
+import framework.Move;
+import framework.player.factory.Player;
 
 public interface GamePiece {
 
@@ -19,4 +22,6 @@ public interface GamePiece {
     void clearCell();
 
     void addMoveListener(IMoveListener listener);
+
+    int getIndex();
 }

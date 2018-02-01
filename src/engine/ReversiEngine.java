@@ -22,7 +22,6 @@ public class ReversiEngine extends ScoreSubject implements IOnClickListener,IPla
     private boolean[][] can_reverse;
     
     IPieceInfo pieceInfo;
-    
 
     private int gridsSize = 0;
     

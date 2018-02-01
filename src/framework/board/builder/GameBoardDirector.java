@@ -1,4 +1,6 @@
-package framework;
+package framework.board.builder;
+
+import framework.board.GameBoard;
 
 public class GameBoardDirector {
 	
@@ -12,8 +14,6 @@ public class GameBoardDirector {
 		builder.createScore();
 		builder.createToolBar();
 		builder.createBoard();
-		
-		
 	}
 	public GameBoard getBoard() {
 		return builder.getBoard();

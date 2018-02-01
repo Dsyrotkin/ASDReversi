@@ -1,16 +1,24 @@
 package framework;
 
-import framework.playerFactory.Player;
-import framework.playerFactory.PlayerFactory;
+import framework.board.GameBoard;
+import framework.piece.GamePiece;
+import framework.player.factory.Player;
+import framework.player.factory.PlayerFactory;
+import framework.gridDriver.strategy.AbstractGridDriver;
 
 public class GameEngine implements IEngine, IMoveListener {
 
     private Player currentPlayer;
     private Player opponent;
 
-    public GameEngine(){
-        currentPlayer = PlayerFactory.getFactory().createPlayer();
-        opponent = PlayerFactory.getFactory().createPlayer();
+    private AbstractGridDriver gridDriver;
+    private GameBoard board;
+
+    public GameEngine(final AbstractGridDriver gridDriver, final GameBoard board){
+        this.currentPlayer = PlayerFactory.getFactory().createPlayer();
+        this.opponent = PlayerFactory.getFactory().createPlayer();
+        this.gridDriver = gridDriver;
+        this.board = board;
     }
 
     public void onClick(int row, int col) {
@@ -28,6 +36,6 @@ public class GameEngine implements IEngine, IMoveListener {
 
     @Override
     public void initializeGame() {
-
+        gridDriver.initializeGame();
     }
 }
