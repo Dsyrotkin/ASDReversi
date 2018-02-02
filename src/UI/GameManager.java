@@ -162,6 +162,7 @@ public class GameManager extends Group {
         GameState savedState = recordManager.getSavedRecord();
         recordManager.clearStoredStates();
         restoreGameState(savedState);
+        gridOperator.storeGameState();
     }
 
     private boolean restoreGameState(GameState state) {
@@ -188,7 +189,6 @@ public class GameManager extends Group {
     public void aboutGame() {
         board.aboutGame();
     }
-
     
     public void setHostServices(HostServices hostServices){
         board.setHostServices(hostServices);
