@@ -33,7 +33,7 @@ public class RecordManager {
     }
 
     public void removeLastState() {
-        if(savedStates.size() > 0) {
+        if(savedStates.size() > 0 && savedStates.size() - 1 > 0) {
             savedStates.remove(savedStates.size() - 1);
         }
     }
