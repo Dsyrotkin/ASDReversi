@@ -19,7 +19,6 @@ public class GameManager extends Group {
 
     private final Board board;
     private final GridOperator gridOperator;
-    private RecordManager recordManager = new RecordManager();
     ReversiEngine engine=new ReversiEngine();
 
     public GameManager() {
@@ -68,6 +67,11 @@ public class GameManager extends Group {
                 doSaveSession();
             }
         });
+        board.undoProperty().addListener((ov, b, b1) -> {
+            if (b1) {
+                performUndo();
+            }
+        });
         
         initializeGameGrid();
         startGame();
@@ -109,8 +113,8 @@ public class GameManager extends Group {
     /**
      * Pauses the game time, covers the grid
      */
-    public void pauseGame() {
-        board.pauseGame();
+    public void undo() {
+        board.undo();
     }
 
     /**
@@ -131,6 +135,7 @@ public class GameManager extends Group {
      */
     private void doSaveSession() {
         GameState currentState = gridOperator.getCurrentState();
+        RecordManager recordManager = RecordManager.getInstance();
         recordManager.saveRecordToFile(currentState);
     }
 
@@ -140,15 +145,28 @@ public class GameManager extends Group {
     public void restoreSession() {
         board.restoreSession();
     }
+
+    private void performUndo() {
+        RecordManager recordManager = RecordManager.getInstance();
+        GameState previousState = recordManager.getPreviousState();
+        restoreGameState(previousState);
+        recordManager.removeLastState();
+    }
     
     /** 
      * Restore the game from a properties file, without confirmation
      */
     private void doRestoreSession() {
+        RecordManager recordManager = RecordManager.getInstance();
         GameState savedState = recordManager.getSavedRecord();
-        if(savedState != null) {
-            gridOperator.restoreGridState(savedState.getPieces());
-            if (savedState.getCurrentPlayer() != engine.getCurrentPlayer()) engine.swapPlayers();
+        recordManager.clearStoredStates();
+        restoreGameState(savedState);
+    }
+
+    private void restoreGameState(GameState state) {
+        if(state != null) {
+            gridOperator.restoreGridState(state.getPieces());
+            if (state.getCurrentPlayer() != engine.getCurrentPlayer()) engine.swapPlayers();
             engine.updateScores();
         }
     }

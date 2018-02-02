@@ -1,18 +1,31 @@
 package UI;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecordManager {
-    private List<GameState> savedStates;
+    private List<GameState> savedStates = new ArrayList<>();
+    private static RecordManager recordManager;
+
+    private RecordManager() { }
+
+    public static RecordManager getInstance() {
+        if(recordManager == null) recordManager = new RecordManager();
+        return recordManager;
+    }
 
     public void saveState(GameState state) {
         savedStates.add(state);
     }
 
-    public GameState getLastState() {
-        if(savedStates.size() > 0) {
-            return savedStates.get(savedStates.size() - 1);
+    public void clearStoredStates() {
+        savedStates.clear();
+    }
+
+    public GameState getPreviousState() {
+        if(savedStates.size() > 1) {
+            return savedStates.get(savedStates.size() - 2);
         }
         return null;
     }

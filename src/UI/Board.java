@@ -60,7 +60,7 @@ public class Board extends Group implements GameBoard{
     private final BooleanProperty gameWonProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty gameOverProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty gameAboutProperty = new SimpleBooleanProperty(false);
-    private final BooleanProperty gamePauseProperty = new SimpleBooleanProperty(false);
+    private final BooleanProperty gameUndoProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty gameTryAgainProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty gameSaveProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty gameRestoreProperty = new SimpleBooleanProperty(false);
@@ -70,6 +70,7 @@ public class Board extends Group implements GameBoard{
     private final BooleanProperty clearGame = new SimpleBooleanProperty(false);
     private final BooleanProperty restoreGame = new SimpleBooleanProperty(false);
     private final BooleanProperty saveGame = new SimpleBooleanProperty(false);
+    private final BooleanProperty undo = new SimpleBooleanProperty(false);
 
     private LocalTime time;
     private Timeline timer;
@@ -99,11 +100,12 @@ public class Board extends Group implements GameBoard{
     private final Button bSave = new Button("Save");
     private final Button bRestore = new Button("Restore");
     private final Button bQuit = new Button("Quit");
+    private final Button bUndo = new Button("Undo");
         
     private final HBox hToolbar = new HBox();
     private HostServices hostServices;
         
-    private final Label lblTime=new Label();  
+    private final Label lblTime=new Label();
     private Timeline timerPause;
     
     private final int gridWidth;
@@ -254,7 +256,7 @@ public class Board extends Group implements GameBoard{
         timerPause.stop();
         layerOnProperty.set(false);
         saveGame.set(true);
-        gameSaveProperty.setValue(false);
+        gameSaveProperty.set(false);
         saveGame.set(false);
     }
 
@@ -262,20 +264,28 @@ public class Board extends Group implements GameBoard{
         timerPause.stop();
         layerOnProperty.set(false);
         restoreGame.set(true);
-        gameRestoreProperty.setValue(false);
+        gameRestoreProperty.set(false);
         restoreGame.set(false);
     }
     
     private void keepGoing(){
         timerPause.stop();
         layerOnProperty.set(false);
-        gamePauseProperty.set(false);
+        gameUndoProperty.set(false);
         gameTryAgainProperty.set(false);
         gameSaveProperty.set(false);
         gameRestoreProperty.set(false);
         gameAboutProperty.set(false);
         gameQuitProperty.set(false);
         timer.play();
+    }
+
+    public void btnUndo() {
+        timerPause.stop();
+        layerOnProperty.set(false);
+        undo.set(true);
+        gameUndoProperty.set(false);
+        undo.set(false);
     }
 
     private void quit() {
@@ -394,6 +404,15 @@ public class Board extends Group implements GameBoard{
                 quit();
             }
         });
+
+        bUndo.getStyleClass().add("game-button");
+        bUndo.setOnTouchPressed(e -> btnUndo());
+        bUndo.setOnMouseClicked(e -> btnUndo());
+        bUndo.setOnKeyPressed(e->{
+            if(e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.SPACE)){
+                btnUndo();
+            }
+        });
       
         timerPause=new Timeline(new KeyFrame(Duration.seconds(1), 
                 e->time=time.plusNanos(1_000_000_000)));
@@ -401,7 +420,7 @@ public class Board extends Group implements GameBoard{
         
         gameWonProperty.addListener(wonListener);
         gameOverProperty.addListener(new Overlay("Game over!","",bTry, null, "game-overlay-over", "game-lblOver",false));
-        gamePauseProperty.addListener(new Overlay("Game Paused","",bContinue, null, "game-overlay-pause", "game-lblPause",true));
+        gameUndoProperty.addListener(new Overlay("Perform Undo?","",bUndo, bContinueNo, "game-overlay-pause", "game-lblPause",true));
         gameTryAgainProperty.addListener(new Overlay("Try Again?","Current game will be deleted",bTry, bContinueNo, "game-overlay-pause", "game-lblPause",true));
         gameSaveProperty.addListener(new Overlay("Save?","Previous saved data will be overwritten",bSave, bContinueNo, "game-overlay-pause", "game-lblPause",true));
         gameRestoreProperty.addListener(new Overlay("Restore?","Current game will be deleted",bRestore, bContinueNo, "game-overlay-pause", "game-lblPause",true));
@@ -504,7 +523,7 @@ public class Board extends Group implements GameBoard{
         gameWonProperty.set(false);
         gameOverProperty.set(false);
         gameAboutProperty.set(false);
-        gamePauseProperty.set(false);
+        gameUndoProperty.set(false);
         gameTryAgainProperty.set(false);
         gameSaveProperty.set(false);
         gameRestoreProperty.set(false);
@@ -576,9 +595,9 @@ public class Board extends Group implements GameBoard{
             gameWonProperty.set(won);
         }
     }
-    public void pauseGame(){
-        if(!gamePauseProperty.get()){
-            gamePauseProperty.set(true);
+    public void undo(){
+        if(!gameUndoProperty.get()) {
+            gameUndoProperty.set(true);
         }
     }
     public void aboutGame(){
@@ -610,6 +629,10 @@ public class Board extends Group implements GameBoard{
     
     public BooleanProperty restoreGameProperty() {
         return restoreGame;
+    }
+
+    public BooleanProperty undoProperty() {
+        return undo;
     }
     
     public boolean saveSession() {
