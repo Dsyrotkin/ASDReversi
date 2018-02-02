@@ -26,6 +26,8 @@ public class RecordManager {
     public GameState getPreviousState() {
         if(savedStates.size() > 1) {
             return savedStates.get(savedStates.size() - 2);
+        } else if(savedStates.size() > 0) {
+            return savedStates.get(savedStates.size() - 1);
         }
         return null;
     }

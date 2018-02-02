@@ -283,6 +283,7 @@ public class ReversiEngine extends ScoreSubject implements IOnClickListener,IPla
         current_player = 2;
         opposing = 1;
         updateScores();
+        pieceInfo.storeGameState();
     }
 	@Override
 	public int getCurrentPlayer() {
