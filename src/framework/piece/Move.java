@@ -1,29 +1,26 @@
-package framework;
+package framework.piece;
 
 import framework.player.factory.Player;
 
 public class Move {
 
-    private int x = 0, y = 0;
-
-    private IPieceInfo pieceInfo;
-
     private Player currentPlayer;
     private Player opposingPlayer;
 
-    public Move(int x, int y, Player  currentPlayer, Player opposingPlayer){
-        this.x = x;
-        this.y = y;
+    private Piece piece;
+
+    public Move(Piece piece, Player currentPlayer, Player opposingPlayer){
+        this.piece = piece;
         this.currentPlayer = currentPlayer;
         this.opposingPlayer = opposingPlayer;
     }
 
     public int getX() {
-        return x;
+        return piece.getRow();
     }
 
     public int getY() {
-        return y;
+        return piece.getColumn();
     }
 
     public Player getCurrentPlayer() {
@@ -32,5 +29,9 @@ public class Move {
 
     public Player getOpposingPlayer() {
         return opposingPlayer;
+    }
+
+    public Piece getPiece() {
+        return piece;
     }
 }

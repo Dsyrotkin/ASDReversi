@@ -1,73 +1,89 @@
-package framework;
+package reversi;
 
-import framework.piece.GamePiece;
+import framework.IMoveOutcome;
+import framework.IPieceInfo;
+import framework.gridDriver.bridge.CustomGridDriver;
+import framework.piece.CellStatus;
+import framework.piece.Move;
+import framework.piece.Piece;
+import framework.piece.RuleStrategy;
 
-public class ReversiPieceRule implements IRule {
+public class ReversiPieceRule extends RuleStrategy {
 
-    private GamePiece piece;
+    private Piece piece;
 
     // 3x3 array that holds the pieces that surround a given piece
     private int[][] surrounding;
     // 3x3 array that determines if a reverse can be made in any direction
     private boolean[][] can_reverse;
 
-    IPieceInfo pieceInfo;
+    //IPieceInfo pieceInfo;
 
-    public ReversiPieceRule(GamePiece piece, IPieceInfo pieceInfo){
+    public ReversiPieceRule(CustomGridDriver driver){
+        super(driver);
+    }
+
+    public ReversiPieceRule(Piece piece, IPieceInfo pieceInfo){
+        super(null);
         this.piece = piece;
         this.surrounding = new int[3][3];
         this.can_reverse = new boolean[3][3];
-        this.pieceInfo = pieceInfo;
+        //this.pieceInfo = pieceInfo;
     }
 
     @Override
     public boolean validateMove(Move from, Move to) {
-        return false;
+        return validateMove(from);
     }
 
     @Override
     public IMoveOutcome move(Move from, Move to) {
+        placePiece(from);
         return null;
     }
 
     //@Override
     public IMoveOutcome move(Move move) {
+        placePiece(move);
         return null;
     }
 
-    private void validateMove(Move move){
-        int currentpiece=piece.getIndex();
-        if (currentpiece==0)
-            pieceInfo.setPiece(move.getX(), move.getY(), move.getCurrentPlayer().getId());
+    private boolean validateMove(Move move){
+        CellStatus status = piece.getCellStatus();
+        if (status == CellStatus.FREE)
+            //pieceInfo.setPiece(move.getX(), move.getY(), move.getCurrentPlayer().getId());
+            gridDriver.setPiece(move);
         else
-            return;
+            return false;
 
         determineSurrounding(move.getX(), move.getY());
 
         if(!adjacentOpposingPiece(move))
         {
-            pieceInfo.setPiece(move.getX(), move.getY(), 0);
-            return;
+            //pieceInfo.setPiece(move.getX(), move.getY(), 0);
+            gridDriver.clearPiece(move);
+            return false;
         }
 
         // see if a reverse can be made in any direction if none can be made then return
         if(!determineReverse(move))
         {
-            pieceInfo.setPiece(move.getX(), move.getY(), 0);
-            return;
+            //pieceInfo.setPiece(move.getX(), move.getY(), 0);
+            gridDriver.clearPiece(move);
+            return false;
         }
+
+        return true;
 
     }
 
     // public method that will try to place a piece in the given x,y coordinate
     public void placePiece(final Move move) {
 
-
-
-        for (int i=0;i<pieceInfo.getRow();i++)
+        for (int i=0;i<gridDriver.getRow();i++)
         {
-            for (int j=0;j<pieceInfo.getRow();j++)
-                System.out.print(pieceInfo.getPiece(i, j)+", ");
+            for (int j=0;j<gridDriver.getRow();j++)
+                System.out.print(gridDriver.getPiece(i, j).getPlayer().getId()+", ");
             System.out.println();
         }
 
@@ -78,21 +94,6 @@ public class ReversiPieceRule implements IRule {
         // the piece and perform the reversing also check if the game has ended
         placeAndReverse(move);
 
-        // if we get to this point then a successful move has been made so swap the
-        // players and update the scores
-        /*swapPlayers();
-        updateScores();
-        determineEndGame();*/
-
-        // print out some information
-        System.out.println("placed at: " + move.getX() + ", " + move.getY());
-        //System.out.println("White: " + player1_score + " Black: " + player2_score);
-        /*if(current_player == 1)
-            System.out.println("current player is White");
-        else
-            System.out.println("current player is Black");
-
-        if(!in_play) determineWinner();*/
     }
 
     // private method for determining which pieces surround x,y will update the
@@ -101,7 +102,8 @@ public class ReversiPieceRule implements IRule {
         for(int i = x - 1; i <= x + 1; i++)
             for(int j = y - 1; j <= y + 1; j++) {
                 if(isValidIndex(i, j))
-                    surrounding[i - (x - 1)][j - (y - 1)] = pieceInfo.getPiece(i, j);
+                    //surrounding[i - (x - 1)][j - (y - 1)] = pieceInfo.getPiece(i, j);
+                    surrounding[i - (x - 1)][j - (y - 1)] = gridDriver.getPiece(i,j).getPlayer().getId();
             }
     }
 
@@ -130,20 +132,20 @@ public class ReversiPieceRule implements IRule {
         // NOTE: this is to keep the compiler happy until you get to this part
         int tempX = x + dx;
         int tempY = y + dy;
-        if(!isValidIndex(tempX, tempY) || pieceInfo.getPiece(tempX, tempY) != move.getOpposingPlayer().getId())
+        if(!isValidIndex(tempX, tempY) || gridDriver.getPiece(tempX, tempY).getPlayer().getId() != move.getOpposingPlayer().getId())
             return false;
 
-        while(pieceInfo.getPiece(tempX, tempY)  == move.getOpposingPlayer().getId()) {
+        while(gridDriver.getPiece(tempX, tempY).getPlayer().getId()  == move.getOpposingPlayer().getId()) {
             if(!isValidIndex(tempX + dx, tempY + dy)) return false;
             tempX += dx;
             tempY += dy;
         }
 
-        return pieceInfo.getPiece(tempX, tempY)  == move.getCurrentPlayer().getId();
+        return gridDriver.getPiece(tempX, tempY).getPlayer().getId()  == move.getCurrentPlayer().getId();
     }
 
     private boolean isValidIndex(int x, int y) {
-        return x >= 0 && y >= 0 && x < pieceInfo.getRow() && y < pieceInfo.getRow();
+        return x >= 0 && y >= 0 && x < gridDriver.getRow() && y < gridDriver.getRow();
     }
 
     // private method for determining if any of the surrounding pieces are an opposing
@@ -161,7 +163,7 @@ public class ReversiPieceRule implements IRule {
     private void placeAndReverse(Move move) {
         int x = move.getX();
         int y = move.getY();
-        //pieceInfo.setPiece(x,y,current_player);
+        //pieceInfo.setEllipse(x,y,current_player);
         for(int i = x - 1; i <= x + 1; i++)
             for(int j = y - 1; j <= y + 1; j++) {
                 if(isValidIndex(i, j) && (i != x || j != y) && can_reverse[i-(x-1)][j-(y-1)]) {
@@ -173,8 +175,10 @@ public class ReversiPieceRule implements IRule {
     // private method to reverse a chain
     private void reverseChain(final int x, final int y, final int dx, final int dy, Move move) {
         if(!isValidIndex(x + dx, y + dy)) return;
-        if(pieceInfo.getPiece(x + dx,y + dy) != move.getOpposingPlayer().getId()) return;
-        pieceInfo.setPiece(x + dx,y + dy,move.getCurrentPlayer().getId());
+        if(gridDriver.getPiece(x + dx,y + dy).getPlayer().getId() != move.getOpposingPlayer().getId()) return;
+        Piece piece = gridDriver.getPiece(x+dx, y+dy);
+        Move move1 = new Move(piece, move.getCurrentPlayer(), move.getOpposingPlayer());
+        gridDriver.setPiece(move1);
         reverseChain(x + dx, y + dy, dx, dy, move);
     }
 

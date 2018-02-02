@@ -177,7 +177,7 @@ public class ReversiEngine extends ScoreSubject implements IOnClickListener,IPla
 
     // private method for placing a piece and reversing pieces
     private void placeAndReverse(final int x, final int y) {
-        //pieceInfo.setPiece(x,y,current_player);
+        //pieceInfo.setEllipse(x,y,current_player);
         for(int i = x - 1; i <= x + 1; i++)
             for(int j = y - 1; j <= y + 1; j++) {
                 if(isValidIndex(i, j) && (i != x || j != y) && can_reverse[i-(x-1)][j-(y-1)]) {

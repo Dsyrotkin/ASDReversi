@@ -37,7 +37,6 @@ public class ReversiBoardBuilder implements GameBoardBuilder {
 	}
 
 
-
 	@Override
 	public void createScore() {
 		board.createScore();

@@ -7,4 +7,5 @@ public interface GameBoard extends ScoreObserver{
 
     void quitGame();
     void startGame();
+    //void pauseGame();
 }

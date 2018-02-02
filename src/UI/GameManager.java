@@ -2,9 +2,13 @@ package UI;
 
 import engine.ReversiEngine;
 import framework.board.builder.GameBoardDirector;
+import framework.gridDriver.bridge.CustomGridDriver;
+import framework.gridDriver.bridge.GridDriver;
+import framework.gridDriver.bridge.GridDriverImpl;
 import javafx.application.HostServices;
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.Group;
+import reversi.ReversiGridDriver;
 
 /**
  *
@@ -35,6 +39,12 @@ public class GameManager extends Group {
      * @param gridSize defines the size of the grid, default 4x4
      */
     public GameManager(int gridSize) {
+
+
+
+        CustomGridDriver customGridDriver = new ReversiGridDriver(gridSize,gridSize,gridSize);
+        GridDriver gridDriver = new GridDriverImpl(customGridDriver);
+
         
         gridOperator=new GridOperator(gridSize,engine,engine);
         engine.setPiece(gridOperator);
