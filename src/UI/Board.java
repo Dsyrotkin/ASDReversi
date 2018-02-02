@@ -5,9 +5,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 import application.Reversi;
-import engine.ScoreObserver;
 import framework.board.GameBoard;
-import framework.player.factory.Player;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -110,12 +108,10 @@ public class Board extends Group implements GameBoard{
     
     private final int gridWidth;
     private final GridOperator gridOperator;
-    private final SessionManager sessionManager;
 
     public Board(GridOperator grid){
         this.gridOperator=grid;
         gridWidth = CELL_SIZE * grid.getGridSize() + BORDER_WIDTH * 2;
-        sessionManager = new SessionManager(gridOperator);
         
         //createScore();
         //createGrid();
@@ -341,7 +337,7 @@ public class Board extends Group implements GameBoard{
         
         overlay.setMinSize(gridWidth, gridWidth);
         overlay.setAlignment(Pos.CENTER);
-        overlay.setTranslateY(TOP_HEIGHT + GAP_HEIGHT);
+        overlay.setTranslateY(TOP_HEIGHT + GAP_HEIGHT - 60);
         
         overlay.getChildren().setAll(txtOverlay);
         txtOverlay.setAlignment(Pos.CENTER);
@@ -642,52 +638,11 @@ public class Board extends Group implements GameBoard{
         return true;
     }
     
-    /*
-    Once we have confirmation
-    */
-    public void saveSession1() {
-    	saveGame.set(false);
-        //sessionManager.saveSession(gameGrid, gameScoreProperty.getValue(), LocalTime.now().minusNanos(time.toNanoOfDay()).toNanoOfDay());
-        keepGoing();
-    }
-    
     public boolean restoreSession() {
         if(!gameRestoreProperty.get()){
             gameRestoreProperty.set(true);
         }
         return true;
-    }
-    
-    /*
-    Once we have confirmation
-    */
-    public boolean restoreSession1() {
-        timerPause.stop();
-        restoreGame.set(false);
-        doClearGame();
-        timer.stop();
-        StringProperty sTime=new SimpleStringProperty("");
-//        int score = sessionManager.restoreSession(gameGrid, sTime);
-//        if (score >= 0) {
-//            gameScoreProperty.set(score);
-//            // check tiles>=2048
-//            gameWonProperty.set(false);
-//            gameGrid.forEach((l,t)->{
-//               if(t!=null && t.getValue()>=GameManager.FINAL_VALUE_TO_WIN){
-//                   gameWonProperty.removeListener(wonListener);
-//                   gameWonProperty.set(true);
-//                   gameWonProperty.addListener(wonListener);
-//               }
-//            });
-//            if(!sTime.get().isEmpty()){
-//                time = LocalTime.now().minusNanos(new Long(sTime.get()));
-//            }
-//            timer.play();
-//            return true;
-//        } 
-        // not session found, restart again
-        doResetGame();
-        return false;
     }
     
     public void saveRecord() {
