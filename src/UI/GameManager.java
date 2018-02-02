@@ -149,8 +149,9 @@ public class GameManager extends Group {
     private void performUndo() {
         RecordManager recordManager = RecordManager.getInstance();
         GameState previousState = recordManager.getPreviousState();
-        restoreGameState(previousState);
-        recordManager.removeLastState();
+        if(restoreGameState(previousState)) {
+            recordManager.removeLastState();
+        }
     }
     
     /** 
@@ -163,12 +164,14 @@ public class GameManager extends Group {
         restoreGameState(savedState);
     }
 
-    private void restoreGameState(GameState state) {
+    private boolean restoreGameState(GameState state) {
         if(state != null) {
             gridOperator.restoreGridState(state.getPieces());
             if (state.getCurrentPlayer() != engine.getCurrentPlayer()) engine.swapPlayers();
             engine.updateScores();
+            return true;
         }
+        return false;
     }
 
     /**
