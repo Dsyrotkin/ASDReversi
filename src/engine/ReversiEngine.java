@@ -35,7 +35,7 @@ public class ReversiEngine extends ScoreSubject implements IOnClickListener,IPla
     }
     public void setPiece(IPieceInfo pieceInfo)
     {
-    	this.pieceInfo=pieceInfo;
+    	this.pieceInfo = pieceInfo;
     }
 
 
@@ -99,6 +99,8 @@ public class ReversiEngine extends ScoreSubject implements IOnClickListener,IPla
         updateScores();
         determineEndGame();
 
+        pieceInfo.storeGameState();
+
         // print out some information
         System.out.println("placed at: " + cellx + ", " + celly);
         System.out.println("White: " + player1_score + " Black: " + player2_score);
@@ -107,7 +109,10 @@ public class ReversiEngine extends ScoreSubject implements IOnClickListener,IPla
         else
             System.out.println("current player is Black");
 
-        if(!in_play) determineWinner();
+        if(!in_play) {
+            pieceInfo.clearStoredGameStates();
+            determineWinner();
+        }
     }
     
     // private method for determining which pieces surround x,y will update the
