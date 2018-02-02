@@ -1,5 +1,6 @@
 package UI;
 
+import javafx.application.HostServices;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,8 +18,9 @@ public class GamePane extends StackPane {
 	private Bounds gameBounds;
     private final static int MARGIN = 36;
     
-	public GamePane() {
+	public GamePane(HostServices hostServices) {
         gameManager = new GameManager();
+        gameManager.setHostServices(hostServices);
         gameBounds = gameManager.getLayoutBounds();
 
         getChildren().add(gameManager);

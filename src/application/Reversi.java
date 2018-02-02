@@ -21,7 +21,7 @@ public class Reversi extends Application {
 
 	// overridden init method
 	public void init() {
-		root = new GamePane();
+		root = new GamePane(getHostServices());
 
 	}
 	
