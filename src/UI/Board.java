@@ -5,9 +5,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 import application.Reversi;
-import engine.ScoreObserver;
 import framework.board.GameBoard;
-import framework.player.factory.Player;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -60,7 +58,7 @@ public class Board extends Group implements GameBoard{
     private final BooleanProperty gameWonProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty gameOverProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty gameAboutProperty = new SimpleBooleanProperty(false);
-    private final BooleanProperty gamePauseProperty = new SimpleBooleanProperty(false);
+    private final BooleanProperty gameUndoProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty gameTryAgainProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty gameSaveProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty gameRestoreProperty = new SimpleBooleanProperty(false);
@@ -70,6 +68,7 @@ public class Board extends Group implements GameBoard{
     private final BooleanProperty clearGame = new SimpleBooleanProperty(false);
     private final BooleanProperty restoreGame = new SimpleBooleanProperty(false);
     private final BooleanProperty saveGame = new SimpleBooleanProperty(false);
+    private final BooleanProperty undo = new SimpleBooleanProperty(false);
 
     private LocalTime time;
     private Timeline timer;
@@ -99,21 +98,20 @@ public class Board extends Group implements GameBoard{
     private final Button bSave = new Button("Save");
     private final Button bRestore = new Button("Restore");
     private final Button bQuit = new Button("Quit");
+    private final Button bUndo = new Button("Undo");
         
     private final HBox hToolbar = new HBox();
     private HostServices hostServices;
         
-    private final Label lblTime=new Label();  
+    private final Label lblTime=new Label();
     private Timeline timerPause;
     
     private final int gridWidth;
     private final GridOperator gridOperator;
-    private final SessionManager sessionManager;
 
     public Board(GridOperator grid){
         this.gridOperator=grid;
         gridWidth = CELL_SIZE * grid.getGridSize() + BORDER_WIDTH * 2;
-        sessionManager = new SessionManager(gridOperator);
         
         //createScore();
         //createGrid();
@@ -254,7 +252,7 @@ public class Board extends Group implements GameBoard{
         timerPause.stop();
         layerOnProperty.set(false);
         saveGame.set(true);
-        gameSaveProperty.setValue(false);
+        gameSaveProperty.set(false);
         saveGame.set(false);
     }
 
@@ -262,20 +260,28 @@ public class Board extends Group implements GameBoard{
         timerPause.stop();
         layerOnProperty.set(false);
         restoreGame.set(true);
-        gameRestoreProperty.setValue(false);
+        gameRestoreProperty.set(false);
         restoreGame.set(false);
     }
     
     private void keepGoing(){
         timerPause.stop();
         layerOnProperty.set(false);
-        gamePauseProperty.set(false);
+        gameUndoProperty.set(false);
         gameTryAgainProperty.set(false);
         gameSaveProperty.set(false);
         gameRestoreProperty.set(false);
         gameAboutProperty.set(false);
         gameQuitProperty.set(false);
         timer.play();
+    }
+
+    public void btnUndo() {
+        timerPause.stop();
+        layerOnProperty.set(false);
+        undo.set(true);
+        gameUndoProperty.set(false);
+        undo.set(false);
     }
 
     private void quit() {
@@ -331,7 +337,7 @@ public class Board extends Group implements GameBoard{
         
         overlay.setMinSize(gridWidth, gridWidth);
         overlay.setAlignment(Pos.CENTER);
-        overlay.setTranslateY(TOP_HEIGHT + GAP_HEIGHT);
+        overlay.setTranslateY(TOP_HEIGHT + GAP_HEIGHT - 60);
         
         overlay.getChildren().setAll(txtOverlay);
         txtOverlay.setAlignment(Pos.CENTER);
@@ -394,6 +400,15 @@ public class Board extends Group implements GameBoard{
                 quit();
             }
         });
+
+        bUndo.getStyleClass().add("game-button");
+        bUndo.setOnTouchPressed(e -> btnUndo());
+        bUndo.setOnMouseClicked(e -> btnUndo());
+        bUndo.setOnKeyPressed(e->{
+            if(e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.SPACE)){
+                btnUndo();
+            }
+        });
       
         timerPause=new Timeline(new KeyFrame(Duration.seconds(1), 
                 e->time=time.plusNanos(1_000_000_000)));
@@ -401,7 +416,7 @@ public class Board extends Group implements GameBoard{
         
         gameWonProperty.addListener(wonListener);
         gameOverProperty.addListener(new Overlay("Game over!","",bTry, null, "game-overlay-over", "game-lblOver",false));
-        gamePauseProperty.addListener(new Overlay("Game Paused","",bContinue, null, "game-overlay-pause", "game-lblPause",true));
+        gameUndoProperty.addListener(new Overlay("Perform Undo?","",bUndo, bContinueNo, "game-overlay-pause", "game-lblPause",true));
         gameTryAgainProperty.addListener(new Overlay("Try Again?","Current game will be deleted",bTry, bContinueNo, "game-overlay-pause", "game-lblPause",true));
         gameSaveProperty.addListener(new Overlay("Save?","Previous saved data will be overwritten",bSave, bContinueNo, "game-overlay-pause", "game-lblPause",true));
         gameRestoreProperty.addListener(new Overlay("Restore?","Current game will be deleted",bRestore, bContinueNo, "game-overlay-pause", "game-lblPause",true));
@@ -417,43 +432,43 @@ public class Board extends Group implements GameBoard{
                 flow.setPrefSize(gridWidth, gridWidth);
                 flow.setMaxSize(gridWidth, gridWidth);
                 flow.setPrefSize(BASELINE_OFFSET_SAME_AS_HEIGHT, BASELINE_OFFSET_SAME_AS_HEIGHT);
-                Text t00 = new Text("2048");
+                Text t00 = new Text("Reversi");
                 t00.getStyleClass().setAll("game-label","game-lblAbout");
-                Text t01 = new Text("FX");
-                t01.getStyleClass().setAll("game-label","game-lblAbout2");
+//                Text t01 = new Text("FX");
+//                t01.getStyleClass().setAll("game-label","game-lblAbout2");
                 Text t02 = new Text(" Game\n");
                 t02.getStyleClass().setAll("game-label","game-lblAbout");
                 Text t1 = new Text("JavaFX game - Desktop version\n\n");
                 t1.getStyleClass().setAll("game-label", "game-lblAboutSub");
-                Text t20 = new Text("Powered by ");
+                Text t20 = new Text("Powered by Board Game Framework");
                 t20.getStyleClass().setAll("game-label", "game-lblAboutSub");
                 Hyperlink link1 = new Hyperlink();
-                link1.setText("JavaFXPorts");
-                link1.setOnAction(e->hostServices.showDocument("http://javafxports.org/page/home"));
+                link1.setText("");
+                //link1.setOnAction(e->hostServices.showDocument("http://javafxports.org/page/home"));
                 link1.getStyleClass().setAll("game-label", "game-lblAboutSub2");
-                Text t21 = new Text(" Project \n\n");
+                Text t21 = new Text(" \n\n");
                 t21.getStyleClass().setAll("game-label", "game-lblAboutSub");
-                Text t23 = new Text("\u00A9 ");
-                t23.getStyleClass().setAll("game-label", "game-lblAboutSub");
+//                Text t23 = new Text("\u00A9 ");
+//                t23.getStyleClass().setAll("game-label", "game-lblAboutSub");
                 Hyperlink link2 = new Hyperlink();
-                link2.setText("@JPeredaDnr");
-                link2.setOnAction(e->hostServices.showDocument("https://twitter.com/JPeredaDnr"));
+                link2.setText("@Rules");
+                link2.setOnAction(e->hostServices.showDocument("http://www.flyordie.com/games/help/reversi/en/games_rules_reversi.html"));
                 link2.getStyleClass().setAll("game-label", "game-lblAboutSub2");
-                Text t22 = new Text(" & ");
-                t22.getStyleClass().setAll("game-label", "game-lblAboutSub");
-                Hyperlink link3 = new Hyperlink();
-                link3.setText("@brunoborges");
-                link3.setOnAction(e->hostServices.showDocument("https://twitter.com/brunoborges"));
-                Text t32 = new Text(" & ");
-                t32.getStyleClass().setAll("game-label", "game-lblAboutSub");
-                link3.getStyleClass().setAll("game-label", "game-lblAboutSub2");
+//                Text t22 = new Text(" & ");
+//                t22.getStyleClass().setAll("game-label", "game-lblAboutSub");
+//                Hyperlink link3 = new Hyperlink();
+//                link3.setText("@brunoborges");
+//                link3.setOnAction(e->hostServices.showDocument("https://twitter.com/brunoborges"));
+//                Text t32 = new Text(" & ");
+//                t32.getStyleClass().setAll("game-label", "game-lblAboutSub");
+//                link3.getStyleClass().setAll("game-label", "game-lblAboutSub2");
                 Text t24 = new Text("\n\n");
                 t24.getStyleClass().setAll("game-label", "game-lblAboutSub");
                 
-                Text t31 = new Text(" Version "+Reversi.VERSION+" - 2015\n\n");
+                Text t31 = new Text(" Version "+Reversi.VERSION+" - 2018\n\n");
                 t31.getStyleClass().setAll("game-label", "game-lblAboutSub");
                 
-                flow.getChildren().setAll(t00, t01, t02, t1, t20, link1, t21, t23, link2, t22, link3);
+                flow.getChildren().setAll(t00, t02, t1, t20, t21, link2);
                 flow.getChildren().addAll(t24, t31);
                 txtOverlay.getChildren().setAll(flow);
                 buttonsOverlay.getChildren().setAll(bContinue);
@@ -504,7 +519,7 @@ public class Board extends Group implements GameBoard{
         gameWonProperty.set(false);
         gameOverProperty.set(false);
         gameAboutProperty.set(false);
-        gamePauseProperty.set(false);
+        gameUndoProperty.set(false);
         gameTryAgainProperty.set(false);
         gameSaveProperty.set(false);
         gameRestoreProperty.set(false);
@@ -576,9 +591,9 @@ public class Board extends Group implements GameBoard{
             gameWonProperty.set(won);
         }
     }
-    public void pauseGame(){
-        if(!gamePauseProperty.get()){
-            gamePauseProperty.set(true);
+    public void undo(){
+        if(!gameUndoProperty.get()) {
+            gameUndoProperty.set(true);
         }
     }
     public void aboutGame(){
@@ -611,6 +626,10 @@ public class Board extends Group implements GameBoard{
     public BooleanProperty restoreGameProperty() {
         return restoreGame;
     }
+
+    public BooleanProperty undoProperty() {
+        return undo;
+    }
     
     public boolean saveSession() {
         if(!gameSaveProperty.get()){
@@ -619,52 +638,11 @@ public class Board extends Group implements GameBoard{
         return true;
     }
     
-    /*
-    Once we have confirmation
-    */
-    public void saveSession1() {
-    	saveGame.set(false);
-        //sessionManager.saveSession(gameGrid, gameScoreProperty.getValue(), LocalTime.now().minusNanos(time.toNanoOfDay()).toNanoOfDay());
-        keepGoing();
-    }
-    
     public boolean restoreSession() {
         if(!gameRestoreProperty.get()){
             gameRestoreProperty.set(true);
         }
         return true;
-    }
-    
-    /*
-    Once we have confirmation
-    */
-    public boolean restoreSession1() {
-        timerPause.stop();
-        restoreGame.set(false);
-        doClearGame();
-        timer.stop();
-        StringProperty sTime=new SimpleStringProperty("");
-//        int score = sessionManager.restoreSession(gameGrid, sTime);
-//        if (score >= 0) {
-//            gameScoreProperty.set(score);
-//            // check tiles>=2048
-//            gameWonProperty.set(false);
-//            gameGrid.forEach((l,t)->{
-//               if(t!=null && t.getValue()>=GameManager.FINAL_VALUE_TO_WIN){
-//                   gameWonProperty.removeListener(wonListener);
-//                   gameWonProperty.set(true);
-//                   gameWonProperty.addListener(wonListener);
-//               }
-//            });
-//            if(!sTime.get().isEmpty()){
-//                time = LocalTime.now().minusNanos(new Long(sTime.get()));
-//            }
-//            timer.play();
-//            return true;
-//        } 
-        // not session found, restart again
-        doResetGame();
-        return false;
     }
     
     public void saveRecord() {

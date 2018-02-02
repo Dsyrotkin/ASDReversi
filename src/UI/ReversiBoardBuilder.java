@@ -27,7 +27,7 @@ public class ReversiBoardBuilder implements GameBoardBuilder {
         toolbar.setPadding(new Insets(10.0));
         Button btItem1 = createButtonItem("mSave", "Save Session", t->manager.saveSession());
         Button btItem2 = createButtonItem("mRestore", "Restore Session", t->manager.restoreSession());
-        Button btItem3 = createButtonItem("mPause", "Pause Game", t->manager.pauseGame());
+        Button btItem3 = createButtonItem("mUndo", "Undo", t->manager.undo());
         Button btItem4 = createButtonItem("mReplay", "Try Again", t->manager.tryAgain());
         Button btItem5 = createButtonItem("mInfo", "About the Game", t->manager.aboutGame());
         toolbar.getChildren().setAll(btItem1, btItem2, btItem3, btItem4, btItem5);

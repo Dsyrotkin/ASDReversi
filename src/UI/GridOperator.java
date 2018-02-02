@@ -58,6 +58,18 @@ public class GridOperator implements IPieceInfo {
 		state.setCurrentPlayer(iPlayer.getCurrentPlayer());
 		return state;
 	}
+
+	@Override
+	public void storeGameState() {
+		RecordManager recordManager = RecordManager.getInstance();
+		recordManager.saveState(getCurrentState());
+	}
+
+	@Override
+	public void clearStoredGameStates() {
+		RecordManager recordManager = RecordManager.getInstance();
+		recordManager.clearStoredStates();
+	}
     
     public int getGridSize(){ return gridSize; }
 
@@ -73,7 +85,6 @@ public class GridOperator implements IPieceInfo {
     }
 
     private ReversiPiece createCell(int row, int col, int CELL_SIZE){
-        
         return new ReversiPiece(0,row,col,CELL_SIZE,onClickListener,iPlayer );
     }
 
