@@ -684,8 +684,31 @@ public class ReversiBoard1 extends Board {
     }
 
     @Override
-    public void updateWinner(String info) {
-        wonListener.message=info;
+    public void updateWinner() {
+
+        ScoreBoard scoreBoard = gridDriver.getScore();
+
+        int player1_score = scoreBoard.getPlayerOneScore();
+        int player2_score = scoreBoard.getPlayerTwoScore();
+
+        String str="";
+        if(player1_score > player2_score)
+        {
+            System.out.println("Player 1 is winner");
+            str="White wins\r\nWhite: "+player1_score+"\r\nBlack: "+player2_score;
+        }
+        else if(player2_score > player1_score)
+        {
+            System.out.println("Player 2 is winner");
+            str="Black wins\r\nWhite: "+player1_score+"\r\nBlack: "+player2_score;
+        }
+        else
+        {
+            str="No winner\r\nWhite: "+player1_score+"\r\nBlack: "+player2_score;
+            System.out.println("No winner");
+        }
+
+        wonListener.message=str;
         setGameWin(true);
     }
 

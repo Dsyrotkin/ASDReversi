@@ -42,4 +42,9 @@ public class GridDriverImpl extends GridDriver {
     public ScoreBoard getScore() {
         return customGridDriver.getScore();
     }
+
+    @Override
+    public boolean determineEndGame(Player currentPlayer, Player opponent) {
+        return customGridDriver.determineEndGame(currentPlayer,opponent);
+    }
 }

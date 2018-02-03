@@ -24,4 +24,7 @@ public abstract class PieceWrapper extends Group {
         });
     }
 
+    public Piece getPiece() {
+        return piece;
+    }
 }

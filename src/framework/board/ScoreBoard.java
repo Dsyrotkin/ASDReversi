@@ -1,21 +1,49 @@
 package framework.board;
 
+import framework.piece.Piece;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ScoreBoard {
 
-    private int playerOneScore;
+    protected List<Piece> playerOneScore;
+    protected List<Piece> playerTwoScore;
 
-    private int playerTwoScore;
+    public ScoreBoard(){
+        playerOneScore = new ArrayList<>();
+        playerTwoScore = new ArrayList<>();
+    }
 
-    public ScoreBoard(final int playerOneScore, final int playerTwoScore){
-        this.playerOneScore = playerOneScore;
-        this.playerTwoScore = playerTwoScore;
+    public void addPiece(Piece piece){
+        removePiece(piece);
+        if (piece.getPlayerId() == 1){
+            playerOneScore.add(piece);
+        }else if (piece.getPlayerId() == 2){
+            playerTwoScore.add(piece);
+        }
     }
 
     public int getPlayerOneScore() {
-        return playerOneScore;
+        return playerOneScore.size();
     }
 
     public int getPlayerTwoScore() {
-        return playerTwoScore;
+        return playerTwoScore.size();
     }
+
+    public boolean removePiece(Piece piece){
+        if (playerOneScore.contains(piece)){
+            playerOneScore.remove(piece);
+            return true;
+        }
+
+        if (playerTwoScore.contains(piece)){
+            playerTwoScore.remove(piece);
+            return true;
+        }
+
+        return false;
+    }
+
 }

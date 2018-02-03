@@ -27,7 +27,7 @@ public abstract class ScoreSubjectNew {
 
 	}
 
-	public void notifyWinner(String info) {
-		observers.forEach(c ->  c.updateWinner(info));
+	public void notifyWinner() {
+		observers.forEach(c ->  c.updateWinner());
 	}
 }

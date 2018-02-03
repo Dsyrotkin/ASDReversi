@@ -11,19 +11,21 @@ public abstract class CustomGridDriver {
 
     private int column, row;
     private int gridSize;
+    private ScoreBoard scoreBoard;
+    private Grid grid;
 
     public CustomGridDriver(){
         this.column = 0;
         this.row = 0;
+
     }
 
     public CustomGridDriver(final int column, final int row, int gridSize){
         this.row = row;
         this.column = column;
         this.gridSize = gridSize;
+        this.scoreBoard = new ScoreBoard();
     }
-
-    private Grid grid;
 
     public Grid createGrid(GridCreatorVisitor visitor) {
         visitor.visit(this);
@@ -38,7 +40,7 @@ public abstract class CustomGridDriver {
     public abstract void clearPiece(int row, int column);
     public abstract Piece getPiece(int row, int column);
     public abstract Move generateMove(Piece piece, Player currentPlayer, Player opposing);
-    public abstract ScoreBoard getScore();
+    public abstract boolean determineEndGame(Player currentPlayer, Player opponent);
 
     public Grid getGrid() {
         return grid;
@@ -59,6 +61,10 @@ public abstract class CustomGridDriver {
     public int getColumn() {
         return column;
     }
+
+    public ScoreBoard getScore(){
+        return scoreBoard;
+    };
 
     public abstract void accept(GridCreatorVisitor visitor);
 }

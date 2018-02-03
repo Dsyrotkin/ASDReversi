@@ -34,6 +34,7 @@ public class GamePane extends StackPane {
             gameManager.setLayoutX((getWidth() - gameBounds.getWidth()) / 2d);
             gameManager.setLayoutY((getHeight() - gameBounds.getHeight()) / 2d);
         };
+
         widthProperty().addListener(resize);
         heightProperty().addListener(resize);
 

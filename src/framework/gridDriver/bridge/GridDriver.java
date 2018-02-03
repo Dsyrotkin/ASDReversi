@@ -27,6 +27,8 @@ public abstract class GridDriver {
 
     public abstract ScoreBoard getScore();
 
+    public abstract boolean determineEndGame(Player currentPlayer, Player opponent);
+
     public int getGridSize(){
         return customGridDriver.getGridSize();
     }

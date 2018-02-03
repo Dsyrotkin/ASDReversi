@@ -13,13 +13,11 @@ import reversi.*;
 
 /**
  *
- * @author bruno
+ * @author zack
  */
 public class GameManagerNew extends Group {
 
     public static final int DEFAULT_GRID_SIZE=8;
-
-
 
     ReversiBoard1 board;
     ReversiEngine engine=new ReversiEngine();

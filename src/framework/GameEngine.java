@@ -15,12 +15,15 @@ public class GameEngine extends ScoreSubjectNew implements IEngine, IMoveListene
     private Player currentPlayer;
     private Player opponent;
 
+    private boolean isInPlay;
+
     private GridDriver gridDriver;
     private Board board;
 
     public GameEngine(){
         this.currentPlayer = PlayerFactory.getFactory().createPlayer(PlayerType.FIRST);
         this.opponent = PlayerFactory.getFactory().createPlayer(PlayerType.SECOND);
+        this.isInPlay = true;
     }
 
     public void onClick(int row, int col) {
@@ -28,6 +31,7 @@ public class GameEngine extends ScoreSubjectNew implements IEngine, IMoveListene
     }
 
     public void onMove(Piece piece) {
+
         Move move = gridDriver.generateMove(piece, currentPlayer, opponent);
 
         boolean validMove = gridDriver.executeMove(move);
@@ -37,16 +41,23 @@ public class GameEngine extends ScoreSubjectNew implements IEngine, IMoveListene
         }
 
         updateScore();
+
+        determineGameOver();
+
+        if (!isInPlay){
+            determineWinner();
+        }
     }
 
     @Override
     public void determineGameOver() {
-
+        isInPlay = gridDriver.determineEndGame(currentPlayer,opponent);
     }
 
     @Override
     public void startGame() {
         gridDriver.initializeGame();
+        updateScore();
     }
 
     @Override
@@ -63,7 +74,7 @@ public class GameEngine extends ScoreSubjectNew implements IEngine, IMoveListene
 
     @Override
     public void determineWinner() {
-
+        this.notifyWinner();
     }
 
     public void setBoard(Board board) {

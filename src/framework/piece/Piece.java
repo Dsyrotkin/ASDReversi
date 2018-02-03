@@ -58,4 +58,24 @@ public abstract class Piece implements GamePiece {
     public void setPlayerId(int playerId) {
         this.playerId = playerId;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj == null){
+            return false;
+        }
+
+        if (getClass() != obj.getClass()){
+            return false;
+        }
+
+        final Piece another = (Piece) obj;
+
+        if (another.getRow() != getRow() || another.getColumn() != getColumn()){
+            return false;
+        }
+
+        return true;
+    }
 }

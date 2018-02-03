@@ -40,12 +40,6 @@ public class GameManager extends Group {
      */
     public GameManager(int gridSize) {
 
-
-
-        CustomGridDriver customGridDriver = new ReversiGridDriver(gridSize,gridSize,gridSize);
-        GridDriver gridDriver = new GridDriverImpl(customGridDriver);
-
-        
         gridOperator=new GridOperator(gridSize,engine,engine);
         engine.setPiece(gridOperator);
         engine.setGridsSize(gridSize);
@@ -178,7 +172,9 @@ public class GameManager extends Group {
     private boolean restoreGameState(GameState state) {
         if(state != null) {
             gridOperator.restoreGridState(state.getPieces());
-            if (state.getCurrentPlayer() != engine.getCurrentPlayer()) engine.swapPlayers();
+            if (state.getCurrentPlayer() != engine.getCurrentPlayer()) {
+                engine.swapPlayers();
+            }
             engine.updateScores();
             return true;
         }
