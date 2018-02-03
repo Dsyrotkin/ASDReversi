@@ -16,12 +16,12 @@ import javafx.scene.layout.StackPane;
 
 public class GamePane extends StackPane {
 	
-	private GameManager gameManager;
+	private GameManagerNew gameManager;
 	private Bounds gameBounds;
     private final static int MARGIN = 36;
     
 	public GamePane(HostServices hostServices) {
-        gameManager = new GameManager();
+        gameManager = new GameManagerNew();
         gameManager.setHostServices(hostServices);
         gameBounds = gameManager.getLayoutBounds();
 

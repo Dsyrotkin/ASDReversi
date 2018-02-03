@@ -2,6 +2,8 @@ package framework.piece;
 
 import framework.IMoveOutcome;
 import framework.player.factory.Player;
+import framework.player.factory.PlayerFactory;
+import framework.player.factory.PlayerType;
 
 public abstract class Piece implements GamePiece {
 
@@ -9,24 +11,27 @@ public abstract class Piece implements GamePiece {
     public boolean isValidPiece;
     public RuleStrategy rule;
     public CellStatus cellStatus;
-    public Player player;
+    public int playerId;
 
     public Piece(RuleStrategy rule, int row, int column){
         this.rule = rule;
         this.isValidPiece = false;
         this.row = row;
         this.column = column;
+        this.playerId = 0;
     }
 
-    public final IMoveOutcome doMove(Move from, Move to){
+    public final boolean doMove(Move from, Move to){
 
-        if (validateMove(from,to)){
+        if (!validateMove(from,to)){
 
-            return action(from,to);
+            return false;
 
         }
 
-        return null;
+        action(from,to);
+
+        return true;
     }
 
     public void setValidPiece(boolean validPiece) {
@@ -45,12 +50,12 @@ public abstract class Piece implements GamePiece {
         return row;
     }
 
-    public Player getPlayer() {
-        return player;
+    public int getPlayerId() {
+        return playerId;
     }
 
     @Override
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setPlayerId(int playerId) {
+        this.playerId = playerId;
     }
 }

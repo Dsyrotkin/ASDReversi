@@ -1,6 +1,7 @@
 package framework.gridDriver.bridge;
 
 import framework.board.Grid;
+import framework.board.ScoreBoard;
 import framework.gridCreator.visitor.GridCreatorVisitor;
 import framework.piece.Move;
 import framework.piece.Piece;
@@ -13,8 +14,8 @@ public class GridDriverImpl extends GridDriver {
     }
 
     @Override
-    public void executeMove(Move move) {
-        this.customGridDriver.executeMove(move);
+    public boolean executeMove(Move move) {
+        return this.customGridDriver.executeMove(move);
     }
 
     @Override
@@ -35,5 +36,10 @@ public class GridDriverImpl extends GridDriver {
     @Override
     public Move generateMove(Piece piece, Player currentPlayer, Player opposing) {
         return customGridDriver.generateMove(piece,currentPlayer,opposing);
+    }
+
+    @Override
+    public ScoreBoard getScore() {
+        return customGridDriver.getScore();
     }
 }

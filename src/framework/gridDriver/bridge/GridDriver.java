@@ -1,6 +1,7 @@
 package framework.gridDriver.bridge;
 
 import framework.board.Grid;
+import framework.board.ScoreBoard;
 import framework.gridCreator.visitor.GridCreatorVisitor;
 import framework.piece.Move;
 import framework.piece.Piece;
@@ -14,7 +15,7 @@ public abstract class GridDriver {
         this.customGridDriver = customGridDriver;
     }
 
-    public abstract void executeMove(Move move);
+    public abstract boolean executeMove(Move move);
 
     public abstract void initializeGame();
 
@@ -23,6 +24,8 @@ public abstract class GridDriver {
     public abstract boolean clearGrid();
 
     public abstract Move generateMove(Piece piece, Player currentPlayer, Player opposing);
+
+    public abstract ScoreBoard getScore();
 
     public int getGridSize(){
         return customGridDriver.getGridSize();

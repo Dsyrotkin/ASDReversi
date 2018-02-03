@@ -3,12 +3,15 @@ package reversi;
 import application.Reversi;
 import framework.board.Board;
 import framework.board.Grid;
+import framework.board.ScoreBoard;
 import framework.board.decorator.PieceLayout;
 import framework.gridCreator.visitor.GridCreatorVisitor;
 import framework.gridDriver.bridge.CustomGridDriver;
 import framework.piece.Move;
+import framework.player.factory.Player;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.HostServices;
 import javafx.application.Platform;
@@ -39,7 +42,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-public class ReversiBoard extends Board {
+public class ReversiBoard1 extends Board {
     public static final int CELL_SIZE = 64;
     private static final int BORDER_WIDTH = (14 + 2) / 2;
     private static final int TOP_HEIGHT = 92;
@@ -53,7 +56,7 @@ public class ReversiBoard extends Board {
     private final BooleanProperty gameWonProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty gameOverProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty gameAboutProperty = new SimpleBooleanProperty(false);
-    private final BooleanProperty gamePauseProperty = new SimpleBooleanProperty(false);
+    private final BooleanProperty gameUndoProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty gameTryAgainProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty gameSaveProperty = new SimpleBooleanProperty(false);
     private final BooleanProperty gameRestoreProperty = new SimpleBooleanProperty(false);
@@ -63,6 +66,7 @@ public class ReversiBoard extends Board {
     private final BooleanProperty clearGame = new SimpleBooleanProperty(false);
     private final BooleanProperty restoreGame = new SimpleBooleanProperty(false);
     private final BooleanProperty saveGame = new SimpleBooleanProperty(false);
+    private final BooleanProperty undo = new SimpleBooleanProperty(false);
 
     private LocalTime time;
     private Timeline timer;
@@ -92,6 +96,7 @@ public class ReversiBoard extends Board {
     private final Button bSave = new Button("Save");
     private final Button bRestore = new Button("Restore");
     private final Button bQuit = new Button("Quit");
+    private final Button bUndo = new Button("Undo");
 
     private final HBox hToolbar = new HBox();
     private HostServices hostServices;
@@ -101,7 +106,7 @@ public class ReversiBoard extends Board {
 
     private final int gridWidth;
 
-    public ReversiBoard(PieceLayout pieceLayout, CustomGridDriver customGridDriver){
+    public ReversiBoard1(PieceLayout pieceLayout, CustomGridDriver customGridDriver){
 
         super(pieceLayout, customGridDriver);
 
@@ -135,7 +140,7 @@ public class ReversiBoard extends Board {
         circle1.setRadius(PADDING);
 
         lblScore1.getStyleClass().addAll("game-label","game-score");
-
+        //lblScore1.textProperty().bind(gameScoreProperty.asString());
         vScore.getChildren().addAll(circle1,lblScore1);
 
         HBox vRecord = new HBox(0);
@@ -224,6 +229,11 @@ public class ReversiBoard extends Board {
         vGame.getChildren().add(hToolbar);
     }
 
+    @Override
+    public void init() {
+
+    }
+
     public void setToolBar(HBox toolbar){
         toolbar.disableProperty().bind(layerOnProperty);
         toolbar.spacingProperty().bind(Bindings.divide(vGame.widthProperty(), 10));
@@ -242,16 +252,40 @@ public class ReversiBoard extends Board {
         doResetGame();
     }
 
+    private void btnSaveState() {
+        timerPause.stop();
+        layerOnProperty.set(false);
+        saveGame.set(true);
+        gameSaveProperty.set(false);
+        saveGame.set(false);
+    }
+
+    private void btnRestoreState() {
+        timerPause.stop();
+        layerOnProperty.set(false);
+        restoreGame.set(true);
+        gameRestoreProperty.set(false);
+        restoreGame.set(false);
+    }
+
     private void keepGoing(){
         timerPause.stop();
         layerOnProperty.set(false);
-        gamePauseProperty.set(false);
+        gameUndoProperty.set(false);
         gameTryAgainProperty.set(false);
         gameSaveProperty.set(false);
         gameRestoreProperty.set(false);
         gameAboutProperty.set(false);
         gameQuitProperty.set(false);
         timer.play();
+    }
+
+    public void btnUndo() {
+        timerPause.stop();
+        layerOnProperty.set(false);
+        undo.set(true);
+        gameUndoProperty.set(false);
+        undo.set(false);
     }
 
     private void quit() {
@@ -261,16 +295,53 @@ public class ReversiBoard extends Board {
 
     private Overlay wonListener= new Overlay("You win!","",bContinue, bTry, "game-overlay-pause", "game-lblPause",true);
 
-    @Override
-    public void init() {
+    private class Overlay implements ChangeListener<Boolean> {
 
+        private final Button btn1, btn2;
+        private String message, warning;
+        private final String style1, style2;
+        private final boolean pause;
+
+        public Overlay(String message, String warning, Button btn1, Button btn2, String style1, String style2, boolean pause){
+            this.message=message;
+            this.warning=warning;
+            this.btn1=btn1;
+            this.btn2=btn2;
+            this.style1=style1;
+            this.style2=style2;
+            this.pause=pause;
+        }
+
+        @Override
+        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+            if (newValue) {
+                timer.stop();
+                if(pause){
+                    timerPause.play();
+                }
+                overlay.getStyleClass().setAll("game-overlay",style1);
+                lOvrText.setText(message);
+                lOvrText.getStyleClass().setAll("game-label",style2);
+                lOvrSubText.setText(warning);
+                lOvrSubText.getStyleClass().setAll("game-label","game-lblWarning");
+                txtOverlay.getChildren().setAll(lOvrText,lOvrSubText);
+                buttonsOverlay.getChildren().setAll(btn1);
+                if(btn2!=null){
+                    buttonsOverlay.getChildren().add(btn2);
+                }
+                if(!layerOnProperty.get()){
+                    ReversiBoard1.this.getChildren().addAll(overlay,buttonsOverlay);
+                    layerOnProperty.set(true);
+                }
+            }
+        }
     }
 
-    private void initGameProperties() {
+    public void initGameProperties() {
 
         overlay.setMinSize(gridWidth, gridWidth);
         overlay.setAlignment(Pos.CENTER);
-        overlay.setTranslateY(TOP_HEIGHT + GAP_HEIGHT);
+        overlay.setTranslateY(TOP_HEIGHT + GAP_HEIGHT - 60);
 
         overlay.getChildren().setAll(txtOverlay);
         txtOverlay.setAlignment(Pos.CENTER);
@@ -308,20 +379,20 @@ public class ReversiBoard extends Board {
         });
 
         bSave.getStyleClass().add("game-button");
-        bSave.setOnTouchPressed(e -> saveGame.set(true));
-        bSave.setOnMouseClicked(e -> saveGame.set(true));
+        bSave.setOnTouchPressed(e -> btnSaveState());
+        bSave.setOnMouseClicked(e -> btnSaveState());
         bSave.setOnKeyPressed(e->{
             if(e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.SPACE)){
-                saveGame.set(true);
+                btnSaveState();
             }
         });
 
         bRestore.getStyleClass().add("game-button");
-        bRestore.setOnTouchPressed(e -> restoreGame.set(true));
-        bRestore.setOnMouseClicked(e -> restoreGame.set(true));
+        bRestore.setOnTouchPressed(e -> btnRestoreState());
+        bRestore.setOnMouseClicked(e -> btnRestoreState());
         bRestore.setOnKeyPressed(e->{
             if(e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.SPACE)){
-                restoreGame.set(true);
+                btnRestoreState();
             }
         });
 
@@ -334,13 +405,22 @@ public class ReversiBoard extends Board {
             }
         });
 
+        bUndo.getStyleClass().add("game-button");
+        bUndo.setOnTouchPressed(e -> btnUndo());
+        bUndo.setOnMouseClicked(e -> btnUndo());
+        bUndo.setOnKeyPressed(e->{
+            if(e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.SPACE)){
+                btnUndo();
+            }
+        });
+
         timerPause=new Timeline(new KeyFrame(Duration.seconds(1),
                 e->time=time.plusNanos(1_000_000_000)));
         timerPause.setCycleCount(Animation.INDEFINITE);
 
         gameWonProperty.addListener(wonListener);
         gameOverProperty.addListener(new Overlay("Game over!","",bTry, null, "game-overlay-over", "game-lblOver",false));
-        gamePauseProperty.addListener(new Overlay("Game Paused","",bContinue, null, "game-overlay-pause", "game-lblPause",true));
+        gameUndoProperty.addListener(new Overlay("Perform Undo?","",bUndo, bContinueNo, "game-overlay-pause", "game-lblPause",true));
         gameTryAgainProperty.addListener(new Overlay("Try Again?","Current game will be deleted",bTry, bContinueNo, "game-overlay-pause", "game-lblPause",true));
         gameSaveProperty.addListener(new Overlay("Save?","Previous saved data will be overwritten",bSave, bContinueNo, "game-overlay-pause", "game-lblPause",true));
         gameRestoreProperty.addListener(new Overlay("Restore?","Current game will be deleted",bRestore, bContinueNo, "game-overlay-pause", "game-lblPause",true));
@@ -356,43 +436,43 @@ public class ReversiBoard extends Board {
                 flow.setPrefSize(gridWidth, gridWidth);
                 flow.setMaxSize(gridWidth, gridWidth);
                 flow.setPrefSize(BASELINE_OFFSET_SAME_AS_HEIGHT, BASELINE_OFFSET_SAME_AS_HEIGHT);
-                Text t00 = new Text("2048");
+                Text t00 = new Text("Reversi");
                 t00.getStyleClass().setAll("game-label","game-lblAbout");
-                Text t01 = new Text("FX");
-                t01.getStyleClass().setAll("game-label","game-lblAbout2");
+//                Text t01 = new Text("FX");
+//                t01.getStyleClass().setAll("game-label","game-lblAbout2");
                 Text t02 = new Text(" Game\n");
                 t02.getStyleClass().setAll("game-label","game-lblAbout");
                 Text t1 = new Text("JavaFX game - Desktop version\n\n");
                 t1.getStyleClass().setAll("game-label", "game-lblAboutSub");
-                Text t20 = new Text("Powered by ");
+                Text t20 = new Text("Powered by Board Game Framework");
                 t20.getStyleClass().setAll("game-label", "game-lblAboutSub");
                 Hyperlink link1 = new Hyperlink();
-                link1.setText("JavaFXPorts");
-                link1.setOnAction(e->hostServices.showDocument("http://javafxports.org/page/home"));
+                link1.setText("");
+                //link1.setOnAction(e->hostServices.showDocument("http://javafxports.org/page/home"));
                 link1.getStyleClass().setAll("game-label", "game-lblAboutSub2");
-                Text t21 = new Text(" Project \n\n");
+                Text t21 = new Text(" \n\n");
                 t21.getStyleClass().setAll("game-label", "game-lblAboutSub");
-                Text t23 = new Text("\u00A9 ");
-                t23.getStyleClass().setAll("game-label", "game-lblAboutSub");
+//                Text t23 = new Text("\u00A9 ");
+//                t23.getStyleClass().setAll("game-label", "game-lblAboutSub");
                 Hyperlink link2 = new Hyperlink();
-                link2.setText("@JPeredaDnr");
-                link2.setOnAction(e->hostServices.showDocument("https://twitter.com/JPeredaDnr"));
+                link2.setText("@Rules");
+                link2.setOnAction(e->hostServices.showDocument("http://www.flyordie.com/games/help/reversi/en/games_rules_reversi.html"));
                 link2.getStyleClass().setAll("game-label", "game-lblAboutSub2");
-                Text t22 = new Text(" & ");
-                t22.getStyleClass().setAll("game-label", "game-lblAboutSub");
-                Hyperlink link3 = new Hyperlink();
-                link3.setText("@brunoborges");
-                link3.setOnAction(e->hostServices.showDocument("https://twitter.com/brunoborges"));
-                Text t32 = new Text(" & ");
-                t32.getStyleClass().setAll("game-label", "game-lblAboutSub");
-                link3.getStyleClass().setAll("game-label", "game-lblAboutSub2");
+//                Text t22 = new Text(" & ");
+//                t22.getStyleClass().setAll("game-label", "game-lblAboutSub");
+//                Hyperlink link3 = new Hyperlink();
+//                link3.setText("@brunoborges");
+//                link3.setOnAction(e->hostServices.showDocument("https://twitter.com/brunoborges"));
+//                Text t32 = new Text(" & ");
+//                t32.getStyleClass().setAll("game-label", "game-lblAboutSub");
+//                link3.getStyleClass().setAll("game-label", "game-lblAboutSub2");
                 Text t24 = new Text("\n\n");
                 t24.getStyleClass().setAll("game-label", "game-lblAboutSub");
 
-                Text t31 = new Text(" Version "+ Reversi.VERSION+" - 2015\n\n");
+                Text t31 = new Text(" Version "+Reversi.VERSION+" - 2018\n\n");
                 t31.getStyleClass().setAll("game-label", "game-lblAboutSub");
 
-                flow.getChildren().setAll(t00, t01, t02, t1, t20, link1, t21, t23, link2, t22, link3);
+                flow.getChildren().setAll(t00, t02, t1, t20, t21, link2);
                 flow.getChildren().addAll(t24, t31);
                 txtOverlay.getChildren().setAll(flow);
                 buttonsOverlay.getChildren().setAll(bContinue);
@@ -435,6 +515,7 @@ public class ReversiBoard extends Board {
 
         //gridOperator.traverseGrid(0);
         gridDriver.clearGrid();
+        gridDriver.clearGrid();
         clearGame.set(false);
         resetGame.set(false);
         restoreGame.set(false);
@@ -444,7 +525,7 @@ public class ReversiBoard extends Board {
         gameWonProperty.set(false);
         gameOverProperty.set(false);
         gameAboutProperty.set(false);
-        gamePauseProperty.set(false);
+        gameUndoProperty.set(false);
         gameTryAgainProperty.set(false);
         gameSaveProperty.set(false);
         gameRestoreProperty.set(false);
@@ -458,6 +539,31 @@ public class ReversiBoard extends Board {
         resetGame.set(true);
     }
 
+    public void animateScore() {
+        if(gameMovePoints.get()==0){
+            return;
+        }
+
+        final Timeline timeline = new Timeline();
+        lblPoints.setText("+" + gameMovePoints.getValue().toString());
+        lblPoints.setOpacity(1);
+        double posX=vScore.localToScene(vScore.getWidth()/2d,0).getX();
+        lblPoints.setTranslateX(0);
+        lblPoints.setTranslateX(lblPoints.sceneToLocal(posX, 0).getX()-lblPoints.getWidth()/2d);
+        lblPoints.setLayoutY(20);
+        final KeyValue kvO = new KeyValue(lblPoints.opacityProperty(), 0);
+        final KeyValue kvY = new KeyValue(lblPoints.layoutYProperty(), 100);
+
+        Duration animationDuration = Duration.millis(600);
+        final KeyFrame kfO = new KeyFrame(animationDuration, kvO);
+        final KeyFrame kfY = new KeyFrame(animationDuration, kvY);
+
+        timeline.getKeyFrames().add(kfO);
+        timeline.getKeyFrames().add(kfY);
+
+        timeline.play();
+    }
+
     public Group getGridGroup() {
         return gridGroup;
     }
@@ -469,30 +575,73 @@ public class ReversiBoard extends Board {
         timer.playFromStart();
     }
 
+    public void setPoints(int points){
+        gameMovePoints.set(points);
+    }
+
+    public int getPoints() {
+        return gameMovePoints.get();
+    }
+
+    public void addPoints(int points){
+        gameMovePoints.set(gameMovePoints.get() + points);
+        gameScoreProperty.set(gameScoreProperty.get() + points);
+    }
+
+    public void setGameOver(boolean gameOver){
+        gameOverProperty.set(gameOver);
+    }
+
     public void setGameWin(boolean won){
         if(!gameWonProperty.get()){
             gameWonProperty.set(won);
         }
     }
-    public void pauseGame(){
-        if(!gamePauseProperty.get()){
-            gamePauseProperty.set(true);
+    public void undo(){
+        if(!gameUndoProperty.get()) {
+            gameUndoProperty.set(true);
         }
     }
-
+    public void aboutGame(){
+        if(!gameAboutProperty.get()){
+            gameAboutProperty.set(true);
+        }
+    }
     public void quitGame(){
         if(!gameQuitProperty.get()){
             gameQuitProperty.set(true);
         }
     }
 
-    /*
-    Once we have confirmation
-    */
-    public void saveSession1() {
-        saveGame.set(false);
-        //sessionManager.saveSession(gameGrid, gameScoreProperty.getValue(), LocalTime.now().minusNanos(time.toNanoOfDay()).toNanoOfDay());
-        keepGoing();
+    public BooleanProperty isLayerOn(){
+        return layerOnProperty;
+    }
+
+    public BooleanProperty resetGameProperty() {
+        return resetGame;
+    }
+
+    public BooleanProperty clearGameProperty() {
+        return clearGame;
+    }
+
+    public BooleanProperty saveGameProperty() {
+        return saveGame;
+    }
+
+    public BooleanProperty restoreGameProperty() {
+        return restoreGame;
+    }
+
+    public BooleanProperty undoProperty() {
+        return undo;
+    }
+
+    public boolean saveSession() {
+        if(!gameSaveProperty.get()){
+            gameSaveProperty.set(true);
+        }
+        return true;
     }
 
     public boolean restoreSession() {
@@ -500,19 +649,6 @@ public class ReversiBoard extends Board {
             gameRestoreProperty.set(true);
         }
         return true;
-    }
-
-    /*
-    Once we have confirmation
-    */
-    public boolean restoreSession1() {
-        timerPause.stop();
-        restoreGame.set(false);
-        doClearGame();
-        timer.stop();
-        StringProperty sTime=new SimpleStringProperty("");
-        doResetGame();
-        return false;
     }
 
     public void saveRecord() {
@@ -526,20 +662,17 @@ public class ReversiBoard extends Board {
     }
 
     @Override
-    public void updateWinner(String info) {
-        wonListener.message=info;
-        setGameWin(true);
-    }
+    public void updateScore(Player currentplayer) {
 
-    @Override
-    public void updateScore(int currentPlayer, int score1, int score2) {
-        lblScore1.setText(String.valueOf(score1));
-        lblScore2.setText(String.valueOf(score2));
+        ScoreBoard score = gridDriver.getScore();
+
+        lblScore1.setText(String.valueOf(score.getPlayerOneScore()));
+        lblScore2.setText(String.valueOf(score.getPlayerTwoScore()));
 
         Paint select=Color.GOLD;
         Paint unselect=Color.TRANSPARENT;
 
-        if (currentPlayer == 1) {
+        if (currentplayer.getId() == 1) {
 
             circle1.setStroke(select);
             circle2.setStroke(unselect);
@@ -550,49 +683,10 @@ public class ReversiBoard extends Board {
 
     }
 
-    /**
-     * inner class: @{@link Overlay}
-     */
-    private class Overlay implements ChangeListener<Boolean> {
-
-        private final Button btn1, btn2;
-        private String message, warning;
-        private final String style1, style2;
-        private final boolean pause;
-
-        public Overlay(String message, String warning, Button btn1, Button btn2, String style1, String style2, boolean pause){
-            this.message=message;
-            this.warning=warning;
-            this.btn1=btn1;
-            this.btn2=btn2;
-            this.style1=style1;
-            this.style2=style2;
-            this.pause=pause;
-        }
-
-        @Override
-        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-            if (newValue) {
-                timer.stop();
-                if(pause){
-                    timerPause.play();
-                }
-                overlay.getStyleClass().setAll("game-overlay",style1);
-                lOvrText.setText(message);
-                lOvrText.getStyleClass().setAll("game-label",style2);
-                lOvrSubText.setText(warning);
-                lOvrSubText.getStyleClass().setAll("game-label","game-lblWarning");
-                txtOverlay.getChildren().setAll(lOvrText,lOvrSubText);
-                buttonsOverlay.getChildren().setAll(btn1);
-                if(btn2!=null){
-                    buttonsOverlay.getChildren().add(btn2);
-                }
-                if(!layerOnProperty.get()){
-                    ReversiBoard.this.getChildren().addAll(overlay,buttonsOverlay);
-                    layerOnProperty.set(true);
-                }
-            }
-        }
+    @Override
+    public void updateWinner(String info) {
+        wonListener.message=info;
+        setGameWin(true);
     }
 
 }

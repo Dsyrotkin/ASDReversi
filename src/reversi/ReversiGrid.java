@@ -11,7 +11,8 @@ public class ReversiGrid extends Grid {
     }
 
     @Override
-    public Position getPiece(Piece piece) {
-        return null;
+    public Piece getPiece(Position position) {
+        return pieces[position.getRow()][position.getColumn()];
     }
+
 }

@@ -15,8 +15,7 @@ public abstract class PieceLayoutDecorator extends PieceLayout {
 
     @Override
     public Group layoutPieces(Grid pieces) {
-        Parent grid = pieceLayout.layoutPieces(pieces);
-        gridContainer.getChildren().add(grid);
+        gridContainer = pieceLayout.layoutPieces(pieces);
         return getGridContainer();
     }
 

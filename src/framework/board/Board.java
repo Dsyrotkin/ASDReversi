@@ -9,8 +9,9 @@ import framework.gridDriver.bridge.GridDriver;
 import framework.gridDriver.bridge.GridDriverImpl;
 import framework.piece.Move;
 import javafx.scene.Group;
+import javafx.scene.layout.HBox;
 
-public abstract class Board extends Group implements GameBoard {
+public abstract class Board extends Group implements GameBoardNew {
 
     protected PieceLayoutDecorator pieceLayoutDecorator;
 
@@ -26,4 +27,14 @@ public abstract class Board extends Group implements GameBoard {
     public abstract void createGrid(GridCreatorVisitor visitor);
 
     public abstract void init();
+
+    public abstract void setToolBar(HBox toolbar);
+
+    public abstract void initGameProperties();
+
+    public abstract void createScore();
+
+    public GridDriver getGridDriver() {
+        return gridDriver;
+    }
 }

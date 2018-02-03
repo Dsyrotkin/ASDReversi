@@ -7,10 +7,9 @@ import framework.piece.CellStatus;
 import framework.piece.Move;
 import framework.piece.Piece;
 import framework.piece.RuleStrategy;
+import framework.player.factory.Player;
 
 public class ReversiPieceRule extends RuleStrategy {
-
-    private Piece piece;
 
     // 3x3 array that holds the pieces that surround a given piece
     private int[][] surrounding;
@@ -21,14 +20,8 @@ public class ReversiPieceRule extends RuleStrategy {
 
     public ReversiPieceRule(CustomGridDriver driver){
         super(driver);
-    }
-
-    public ReversiPieceRule(Piece piece, IPieceInfo pieceInfo){
-        super(null);
-        this.piece = piece;
         this.surrounding = new int[3][3];
         this.can_reverse = new boolean[3][3];
-        //this.pieceInfo = pieceInfo;
     }
 
     @Override
@@ -49,8 +42,8 @@ public class ReversiPieceRule extends RuleStrategy {
     }
 
     private boolean validateMove(Move move){
-        CellStatus status = piece.getCellStatus();
-        if (status == CellStatus.FREE)
+        int pieceOwner = move.getPiece().getPlayerId();
+        if (pieceOwner == 0)
             //pieceInfo.setPiece(move.getX(), move.getY(), move.getCurrentPlayer().getId());
             gridDriver.setPiece(move);
         else
@@ -83,7 +76,7 @@ public class ReversiPieceRule extends RuleStrategy {
         for (int i=0;i<gridDriver.getRow();i++)
         {
             for (int j=0;j<gridDriver.getRow();j++)
-                System.out.print(gridDriver.getPiece(i, j).getPlayer().getId()+", ");
+                System.out.print(gridDriver.getPiece(i, j).getPlayerId()+", ");
             System.out.println();
         }
 
@@ -103,7 +96,7 @@ public class ReversiPieceRule extends RuleStrategy {
             for(int j = y - 1; j <= y + 1; j++) {
                 if(isValidIndex(i, j))
                     //surrounding[i - (x - 1)][j - (y - 1)] = pieceInfo.getPiece(i, j);
-                    surrounding[i - (x - 1)][j - (y - 1)] = gridDriver.getPiece(i,j).getPlayer().getId();
+                    surrounding[i - (x - 1)][j - (y - 1)] = gridDriver.getPiece(i,j).getPlayerId();
             }
     }
 
@@ -132,16 +125,16 @@ public class ReversiPieceRule extends RuleStrategy {
         // NOTE: this is to keep the compiler happy until you get to this part
         int tempX = x + dx;
         int tempY = y + dy;
-        if(!isValidIndex(tempX, tempY) || gridDriver.getPiece(tempX, tempY).getPlayer().getId() != move.getOpposingPlayer().getId())
+        if(!isValidIndex(tempX, tempY) || gridDriver.getPiece(tempX, tempY).getPlayerId() != move.getOpposingPlayer().getId())
             return false;
 
-        while(gridDriver.getPiece(tempX, tempY).getPlayer().getId()  == move.getOpposingPlayer().getId()) {
+        while(gridDriver.getPiece(tempX, tempY).getPlayerId()  == move.getOpposingPlayer().getId()) {
             if(!isValidIndex(tempX + dx, tempY + dy)) return false;
             tempX += dx;
             tempY += dy;
         }
 
-        return gridDriver.getPiece(tempX, tempY).getPlayer().getId()  == move.getCurrentPlayer().getId();
+        return gridDriver.getPiece(tempX, tempY).getPlayerId()  == move.getCurrentPlayer().getId();
     }
 
     private boolean isValidIndex(int x, int y) {
@@ -175,7 +168,7 @@ public class ReversiPieceRule extends RuleStrategy {
     // private method to reverse a chain
     private void reverseChain(final int x, final int y, final int dx, final int dy, Move move) {
         if(!isValidIndex(x + dx, y + dy)) return;
-        if(gridDriver.getPiece(x + dx,y + dy).getPlayer().getId() != move.getOpposingPlayer().getId()) return;
+        if(gridDriver.getPiece(x + dx,y + dy).getPlayerId() != move.getOpposingPlayer().getId()) return;
         Piece piece = gridDriver.getPiece(x+dx, y+dy);
         Move move1 = new Move(piece, move.getCurrentPlayer(), move.getOpposingPlayer());
         gridDriver.setPiece(move1);

@@ -1,13 +1,16 @@
 package framework;
 
+import engine.ScoreSubject;
+import engine.ScoreSubjectNew;
 import framework.board.Board;
 import framework.piece.Move;
 import framework.piece.Piece;
 import framework.player.factory.Player;
 import framework.player.factory.PlayerFactory;
 import framework.gridDriver.bridge.GridDriver;
+import framework.player.factory.PlayerType;
 
-public class GameEngine implements IEngine, IMoveListener {
+public class GameEngine extends ScoreSubjectNew implements IEngine, IMoveListener {
 
     private Player currentPlayer;
     private Player opponent;
@@ -15,11 +18,9 @@ public class GameEngine implements IEngine, IMoveListener {
     private GridDriver gridDriver;
     private Board board;
 
-    public GameEngine(final GridDriver gridDriver, final Board board){
-        this.currentPlayer = PlayerFactory.getFactory().createPlayer();
-        this.opponent = PlayerFactory.getFactory().createPlayer();
-        this.gridDriver = gridDriver;
-        this.board = board;
+    public GameEngine(){
+        this.currentPlayer = PlayerFactory.getFactory().createPlayer(PlayerType.FIRST);
+        this.opponent = PlayerFactory.getFactory().createPlayer(PlayerType.SECOND);
     }
 
     public void onClick(int row, int col) {
@@ -28,8 +29,14 @@ public class GameEngine implements IEngine, IMoveListener {
 
     public void onMove(Piece piece) {
         Move move = gridDriver.generateMove(piece, currentPlayer, opponent);
-        board.doMove(move);
 
+        boolean validMove = gridDriver.executeMove(move);
+
+        if (validMove){
+            swapPlayers();
+        }
+
+        updateScore();
     }
 
     @Override
@@ -38,22 +45,30 @@ public class GameEngine implements IEngine, IMoveListener {
     }
 
     @Override
-    public void initializeGame() {
+    public void startGame() {
         gridDriver.initializeGame();
     }
 
     @Override
     public void updateScore() {
-
+        super.notifyScore(currentPlayer);
     }
 
     @Override
     public void swapPlayers() {
-
+        Player temp = opponent;
+        opponent = currentPlayer;
+        currentPlayer = temp;
     }
 
     @Override
     public void determineWinner() {
 
     }
+
+    public void setBoard(Board board) {
+        this.board = board;
+        this.gridDriver = board.getGridDriver();
+    }
+
 }

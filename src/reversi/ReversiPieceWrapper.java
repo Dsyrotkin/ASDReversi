@@ -24,6 +24,10 @@ public class ReversiPieceWrapper extends PieceWrapper {
     public ReversiPieceWrapper(Piece piece, IMoveListener listener) {
 
         super(piece, listener);
+        createEclipse();
+        clearPiece();
+        getChildren().add(createCell());
+        getChildren().add(ellipse);
 
     }
 
@@ -78,7 +82,7 @@ public class ReversiPieceWrapper extends PieceWrapper {
 
         int playerId = move.getCurrentPlayer().getId();
 
-        piece.setPlayer(move.getCurrentPlayer());
+        piece.setPlayerId(move.getCurrentPlayer().getId());
 
         switch(playerId) {
             case 1:
@@ -94,7 +98,7 @@ public class ReversiPieceWrapper extends PieceWrapper {
     // method that will set the piece type
     public void clearPiece() {
 
-        piece.setPlayer(null);
+        piece.setPlayerId(0);
 
         ellipse.setFill(Color.TRANSPARENT);
 

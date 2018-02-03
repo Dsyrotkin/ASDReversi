@@ -29,6 +29,10 @@ public abstract class Grid {
         this.piecesUI = piecesUI;
     }
 
+    public PieceWrapper getPieceWrapper(Piece piece){
+        return piecesUI[piece.getRow()][piece.getColumn()];
+    }
+
     public int getRow() {
         return row;
     }
@@ -37,5 +41,6 @@ public abstract class Grid {
         return column;
     }
 
-    public abstract Position getPiece(Piece piece);
+    public abstract Piece getPiece(Position position);
+
 }

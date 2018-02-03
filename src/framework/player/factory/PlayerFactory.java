@@ -2,8 +2,6 @@ package framework.player.factory;
 
 public class PlayerFactory extends AbstractPlayerFactory{
 
-    static int playerId = 0;
-
     private static AbstractPlayerFactory playerFactory = new PlayerFactory();
 
     private PlayerFactory(){}
@@ -13,13 +11,13 @@ public class PlayerFactory extends AbstractPlayerFactory{
     }
 
     @Override
-    public Player createPlayer() {
-        if (playerId == 0){
-            playerId++;
+    public Player createPlayer(PlayerType playerType) {
+        if (playerType == PlayerType.FIRST){
             return new PlayerOne("Player one");
-        }else {
-            playerId--;
+        }else if (playerType == PlayerType.SECOND){
             return new PlayerTwo("Player two");
+        } else {
+            return new PlayerZero("Player zero");
         }
     }
 }

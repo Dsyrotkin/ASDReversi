@@ -1,7 +1,7 @@
 package framework.gridDriver.bridge;
 
-import framework.IMoveOutcome;
 import framework.board.Grid;
+import framework.board.ScoreBoard;
 import framework.piece.Move;
 import framework.gridCreator.visitor.GridCreatorVisitor;
 import framework.piece.Piece;
@@ -25,14 +25,20 @@ public abstract class CustomGridDriver {
 
     private Grid grid;
 
-    public abstract Grid createGrid(GridCreatorVisitor visitor);
+    public Grid createGrid(GridCreatorVisitor visitor) {
+        visitor.visit(this);
+        return getGrid();
+    }
+
     public abstract boolean initializeGrid();
-    public abstract IMoveOutcome executeMove(Move move);
+    public abstract boolean executeMove(Move move);
     public abstract boolean clearGrid();
     public abstract void setPiece(Move move);
     public abstract void clearPiece(Move move);
+    public abstract void clearPiece(int row, int column);
     public abstract Piece getPiece(int row, int column);
     public abstract Move generateMove(Piece piece, Player currentPlayer, Player opposing);
+    public abstract ScoreBoard getScore();
 
     public Grid getGrid() {
         return grid;
@@ -53,7 +59,6 @@ public abstract class CustomGridDriver {
     public int getColumn() {
         return column;
     }
-
 
     public abstract void accept(GridCreatorVisitor visitor);
 }
