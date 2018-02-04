@@ -26,7 +26,7 @@ public abstract class Board extends Group implements GameBoardNew {
 
     public abstract void createGrid(GridCreatorVisitor visitor);
 
-    public abstract void init();
+    public abstract void init(Grid grid);
 
     public abstract void setToolBar(HBox toolbar);
 

@@ -106,9 +106,13 @@ public class ReversiBoard1 extends Board {
 
     private final int gridWidth;
 
+    private Grid grid;
+
     public ReversiBoard1(PieceLayout pieceLayout, CustomGridDriver customGridDriver){
 
         super(pieceLayout, customGridDriver);
+
+        this.grid = null;
 
         gridWidth = CELL_SIZE * gridDriver.getGridSize() + BORDER_WIDTH * 2;
 
@@ -190,8 +194,14 @@ public class ReversiBoard1 extends Board {
     }
 
     public void createGrid(GridCreatorVisitor visitor) {
+        grid = gridDriver.createGrid(visitor);
+        init(grid);
+    }
 
-        Grid grid = gridDriver.createGrid(visitor);
+
+    @Override
+    public void init(Grid grid) {
+
         pieceLayoutDecorator.layoutPieces(grid);
 
         pieceLayoutDecorator.getGridContainer().getStyleClass().add("game-grid");
@@ -227,11 +237,6 @@ public class ReversiBoard1 extends Board {
 
         vGame.getChildren().add(hPadding);
         vGame.getChildren().add(hToolbar);
-    }
-
-    @Override
-    public void init() {
-
     }
 
     public void setToolBar(HBox toolbar){

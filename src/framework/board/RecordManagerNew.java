@@ -22,13 +22,7 @@ public class RecordManagerNew {
     }
 
     public void saveState(GameStateNew state) {
-        //savedStates.add(state);
         savedStates.push(state);
-
-        System.out.println("after pushing");
-        for (GameStateNew aNew : savedStates){
-            print(aNew.getPieces());
-        }
     }
 
     public void clearStoredStates() {
@@ -55,9 +49,13 @@ public class RecordManagerNew {
         }
     }
     public void removeLastState() {
-        if(savedStates.size() > 0 && savedStates.size() - 1 > 0) {
-            savedStates.remove(savedStates.size() - 1);
+
+        if (savedStates.size() > 1){
+            savedStates.pop();
         }
+        /*if(savedStates.size() > 0 && savedStates.size() - 1 > 0) {
+            savedStates.remove(savedStates.size() - 1);
+        }*/
     }
 
     public boolean saveRecordToFile(GameStateNew state) {

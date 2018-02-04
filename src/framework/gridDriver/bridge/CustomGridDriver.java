@@ -16,8 +16,6 @@ public abstract class CustomGridDriver {
     private int gridSize;
     private ScoreBoard scoreBoard;
     private Grid grid;
-    private Player currentPlayer;
-    private Player opponent;
     RecordManagerNew recordManager = null;
 
     public CustomGridDriver(){
@@ -76,22 +74,12 @@ public abstract class CustomGridDriver {
         return false;
     }
 
-    private void print(Piece[][] pieces){
-        System.out.println("saved state");
-        for (Piece[] pieces1 : pieces){
-            for (Piece piece : pieces1){
-                System.out.print(piece.getPlayerId());
-            }
-            System.out.println();
-        }
-    }
-
     private boolean restoreGameState(GameStateNew state, Player currentPlayer, Player opponent) {
         if(state != null) {
             restoreGridState(state);
-            if (!state.getCurrentPlayer().equals(currentPlayer)) {
+            /*if (!state.getCurrentPlayer().equals(currentPlayer)) {
                 swapPlayers(currentPlayer, opponent);
-            }
+            }*/
             //engine.updateScores();
             return true;
         }
@@ -100,8 +88,8 @@ public abstract class CustomGridDriver {
 
     public void swapPlayers(Player currentPlayer, Player opponent){
         Player temp = opponent;
-        this.opponent = currentPlayer;
-        this.currentPlayer = temp;
+        opponent = currentPlayer;
+        currentPlayer = temp;
     }
 
     public void clearStoredState(){
@@ -138,14 +126,6 @@ public abstract class CustomGridDriver {
 
     public int getColumn() {
         return column;
-    }
-
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-    public Player getOpponent() {
-        return opponent;
     }
 
     public ScoreBoard getScore(){

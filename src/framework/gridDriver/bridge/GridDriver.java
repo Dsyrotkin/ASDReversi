@@ -36,6 +36,8 @@ public abstract class GridDriver {
 
     public abstract boolean undo(Player currentPlayer, Player opponent);
 
+    public abstract Grid getGrid();
+
     public int getGridSize(){
         return customGridDriver.getGridSize();
     }

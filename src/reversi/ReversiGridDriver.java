@@ -27,6 +27,7 @@ public class ReversiGridDriver extends CustomGridDriver {
         Piece[][] pieces = gameState.getPieces();
         getScore().clearBoard();
         clearGrid();
+        initializeGrid();
         for (int i = 0; i < pieces.length; i++){
             for (int j = 0; j < pieces[i].length; j++){
                 setPiece(pieces[i][j]);
@@ -75,6 +76,7 @@ public class ReversiGridDriver extends CustomGridDriver {
     public void setPiece(Move move) {
         ReversiPieceWrapper pieceWrapper = (ReversiPieceWrapper) getGrid().getPiecesUI()[move.getX()][move.getY()];
         pieceWrapper.decoratePiece(move);
+        getGrid().getPieces()[move.getPiece().getRow()][move.getPiece().getColumn()] = pieceWrapper.getPiece();
         getScore().addPiece(pieceWrapper.getPiece());
     }
 
@@ -82,6 +84,7 @@ public class ReversiGridDriver extends CustomGridDriver {
     public void setPiece(Piece piece) {
         ReversiPieceWrapper pieceWrapper = (ReversiPieceWrapper) getGrid().getPiecesUI()[piece.getRow()][piece.getColumn()];
         pieceWrapper.decoratePiece(piece);
+        getGrid().getPieces()[piece.getRow()][piece.getColumn()] = pieceWrapper.getPiece();
         getScore().addPiece(pieceWrapper.getPiece());
     }
 

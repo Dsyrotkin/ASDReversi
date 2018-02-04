@@ -36,9 +36,7 @@ public class ScoreBoard {
         if (playerOneScore.contains(piece)){
             playerOneScore.remove(piece);
             return true;
-        }
-
-        if (playerTwoScore.contains(piece)){
+        }else if (playerTwoScore.contains(piece)){
             playerTwoScore.remove(piece);
             return true;
         }

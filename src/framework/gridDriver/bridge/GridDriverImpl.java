@@ -15,7 +15,7 @@ public class GridDriverImpl extends GridDriver {
 
     @Override
     public boolean executeMove(Move move) {
-        return this.customGridDriver.executeMove(move);
+        return customGridDriver.executeMove(move);
     }
 
     @Override
@@ -62,5 +62,10 @@ public class GridDriverImpl extends GridDriver {
     @Override
     public boolean undo(Player currentPlayer, Player opponent) {
         return customGridDriver.undoMove(currentPlayer, opponent);
+    }
+
+    @Override
+    public Grid getGrid() {
+        return customGridDriver.getGrid();
     }
 }

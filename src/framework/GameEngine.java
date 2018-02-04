@@ -92,7 +92,27 @@ public class GameEngine extends ScoreSubjectNew implements IEngine, IMoveListene
     @Override
     public void performUndo() {
         if (gridDriver.undo(currentPlayer, opponent)){
+            swapPlayers();
             updateScore();
+
+            System.out.println("undo");
+            for (int i=0;i<gridDriver.getGridSize();i++) {
+                for (int j=0;j<gridDriver.getGridSize();j++)
+                    System.out.print(gridDriver.getGrid().getPieces()[i][j].getPlayerId()+", ");
+                System.out.println();
+            }
         }
     }
+
+
+    private void print(Piece[][] pieces){
+        System.out.println("saved state");
+        for (Piece[] pieces1 : pieces){
+            for (Piece piece : pieces1){
+                System.out.print(piece.getPlayerId());
+            }
+            System.out.println();
+        }
+    }
+
 }
