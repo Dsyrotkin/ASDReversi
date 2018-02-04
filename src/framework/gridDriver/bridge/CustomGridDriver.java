@@ -1,11 +1,14 @@
 package framework.gridDriver.bridge;
 
+import framework.board.GameStateNew;
 import framework.board.Grid;
+import framework.board.RecordManagerNew;
 import framework.board.ScoreBoard;
-import framework.piece.Move;
 import framework.gridCreator.visitor.GridCreatorVisitor;
+import framework.piece.Move;
 import framework.piece.Piece;
 import framework.player.factory.Player;
+import reversi.ReversiPiece;
 
 public abstract class CustomGridDriver {
 
@@ -13,11 +16,13 @@ public abstract class CustomGridDriver {
     private int gridSize;
     private ScoreBoard scoreBoard;
     private Grid grid;
+    private Player currentPlayer;
+    private Player opponent;
+    RecordManagerNew recordManager = null;
 
     public CustomGridDriver(){
         this.column = 0;
         this.row = 0;
-
     }
 
     public CustomGridDriver(final int column, final int row, int gridSize){
@@ -25,17 +30,90 @@ public abstract class CustomGridDriver {
         this.column = column;
         this.gridSize = gridSize;
         this.scoreBoard = new ScoreBoard();
+        this.recordManager = RecordManagerNew.getInstance();
     }
 
     public Grid createGrid(GridCreatorVisitor visitor) {
-        visitor.visit(this);
+        accept(visitor);
+        //visitor.visit(this);
         return getGrid();
     }
 
+    public GameStateNew getGameState(Player currentPlayer, Player opponent){
+        GameStateNew gameState = new GameStateNew();
+        gameState.setPieces(clonePieces(getGrid().getPieces()));
+        gameState.setCurrentPlayer(currentPlayer);
+        gameState.setOpponent(opponent);
+        return gameState;
+    }
+
+    private Piece[][] clonePieces(Piece[][] pieces){
+        Piece[][] pieces1 = new Piece[pieces.length][pieces[0].length];
+        for (int i = 0; i < pieces.length; i++){
+            for (int j = 0; j < pieces[0].length; j++){
+                pieces1[i][j] = new ReversiPiece(pieces[i][j]);
+            }
+        }
+
+        return pieces1;
+    }
+
+    public void storeGameState(Player currentPlayer, Player opponent){
+        recordManager.saveState(getGameState(currentPlayer, opponent));
+    }
+
+    public boolean saveGameToFile(Player currentPlayer, Player opponenet){
+        GameStateNew state = getGameState(currentPlayer, opponenet);
+        return recordManager.saveRecordToFile(state);
+    }
+
+    public boolean undoMove(Player currentPlayer, Player opponent){
+        GameStateNew previousState = recordManager.getPreviousState();
+        if(previousState != null && restoreGameState(previousState, currentPlayer, opponent)) {
+            recordManager.removeLastState();
+            return true;
+        }
+        return false;
+    }
+
+    private void print(Piece[][] pieces){
+        System.out.println("saved state");
+        for (Piece[] pieces1 : pieces){
+            for (Piece piece : pieces1){
+                System.out.print(piece.getPlayerId());
+            }
+            System.out.println();
+        }
+    }
+
+    private boolean restoreGameState(GameStateNew state, Player currentPlayer, Player opponent) {
+        if(state != null) {
+            restoreGridState(state);
+            if (!state.getCurrentPlayer().equals(currentPlayer)) {
+                swapPlayers(currentPlayer, opponent);
+            }
+            //engine.updateScores();
+            return true;
+        }
+        return false;
+    }
+
+    public void swapPlayers(Player currentPlayer, Player opponent){
+        Player temp = opponent;
+        this.opponent = currentPlayer;
+        this.currentPlayer = temp;
+    }
+
+    public void clearStoredState(){
+        recordManager.clearStoredStates();
+    }
+
+    public abstract void restoreGridState(GameStateNew gameState);
     public abstract boolean initializeGrid();
     public abstract boolean executeMove(Move move);
     public abstract boolean clearGrid();
     public abstract void setPiece(Move move);
+    public abstract void setPiece(Piece piece);
     public abstract void clearPiece(Move move);
     public abstract void clearPiece(int row, int column);
     public abstract Piece getPiece(int row, int column);
@@ -62,9 +140,19 @@ public abstract class CustomGridDriver {
         return column;
     }
 
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public Player getOpponent() {
+        return opponent;
+    }
+
     public ScoreBoard getScore(){
         return scoreBoard;
-    };
+    }
 
-    public abstract void accept(GridCreatorVisitor visitor);
+    public void accept(GridCreatorVisitor visitor){
+        visitor.visit(this);
+    }
 }

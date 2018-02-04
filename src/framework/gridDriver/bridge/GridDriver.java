@@ -1,5 +1,6 @@
 package framework.gridDriver.bridge;
 
+import framework.board.GameStateNew;
 import framework.board.Grid;
 import framework.board.ScoreBoard;
 import framework.gridCreator.visitor.GridCreatorVisitor;
@@ -28,6 +29,12 @@ public abstract class GridDriver {
     public abstract ScoreBoard getScore();
 
     public abstract boolean determineEndGame(Player currentPlayer, Player opponent);
+
+    public abstract boolean saveGame(Player currentPlayer, Player opponent);
+
+    public abstract void tempSaveGame(Player currentPlayer, Player opponent);
+
+    public abstract boolean undo(Player currentPlayer, Player opponent);
 
     public int getGridSize(){
         return customGridDriver.getGridSize();

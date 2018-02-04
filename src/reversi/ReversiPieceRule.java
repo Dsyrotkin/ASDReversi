@@ -73,13 +73,13 @@ public class ReversiPieceRule extends RuleStrategy {
     // public method that will try to place a piece in the given x,y coordinate
     public void placePiece(final Move move) {
 
-        for (int i=0;i<gridDriver.getRow();i++)
+        /*for (int i=0;i<gridDriver.getRow();i++)
         {
             for (int j=0;j<gridDriver.getRow();j++)
                 System.out.print(gridDriver.getPiece(i, j).getPlayerId()+", ");
             System.out.println();
         }
-
+*/
         // determine what pieces surround the current piece. if there is no opposing
         // pieces then a valid move cannot be made.
 

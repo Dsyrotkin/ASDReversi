@@ -38,6 +38,7 @@ public class GameEngine extends ScoreSubjectNew implements IEngine, IMoveListene
 
         if (validMove){
             swapPlayers();
+            gridDriver.tempSaveGame(currentPlayer,opponent);
         }
 
         updateScore();
@@ -57,6 +58,7 @@ public class GameEngine extends ScoreSubjectNew implements IEngine, IMoveListene
     @Override
     public void startGame() {
         gridDriver.initializeGame();
+        gridDriver.tempSaveGame(currentPlayer,opponent);
         updateScore();
     }
 
@@ -82,4 +84,15 @@ public class GameEngine extends ScoreSubjectNew implements IEngine, IMoveListene
         this.gridDriver = board.getGridDriver();
     }
 
+    @Override
+    public void doSaveSession() {
+        gridDriver.saveGame(currentPlayer, opponent);
+    }
+
+    @Override
+    public void performUndo() {
+        if (gridDriver.undo(currentPlayer, opponent)){
+            updateScore();
+        }
+    }
 }

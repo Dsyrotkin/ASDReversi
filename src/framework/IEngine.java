@@ -1,6 +1,7 @@
 package framework;
 
 import framework.board.Board;
+import framework.player.factory.Player;
 
 public interface IEngine {
     void determineGameOver();
@@ -9,4 +10,6 @@ public interface IEngine {
     void swapPlayers();
     void determineWinner();
     void setBoard(Board board);
+    void doSaveSession();
+    void performUndo();
 }

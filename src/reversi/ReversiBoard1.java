@@ -515,7 +515,6 @@ public class ReversiBoard1 extends Board {
 
         //gridOperator.traverseGrid(0);
         gridDriver.clearGrid();
-        gridDriver.clearGrid();
         clearGame.set(false);
         resetGame.set(false);
         restoreGame.set(false);

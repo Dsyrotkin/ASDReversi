@@ -30,6 +30,7 @@ public class GridDriverImpl extends GridDriver {
 
     @Override
     public boolean clearGrid() {
+        customGridDriver.clearStoredState();
         return customGridDriver.clearGrid();
     }
 
@@ -46,5 +47,20 @@ public class GridDriverImpl extends GridDriver {
     @Override
     public boolean determineEndGame(Player currentPlayer, Player opponent) {
         return customGridDriver.determineEndGame(currentPlayer,opponent);
+    }
+
+    @Override
+    public boolean saveGame(Player currentPlayer, Player opponent) {
+        return customGridDriver.saveGameToFile(currentPlayer,opponent);
+    }
+
+    @Override
+    public void tempSaveGame(Player currentPlayer, Player opponent) {
+        customGridDriver.storeGameState(currentPlayer, opponent);
+    }
+
+    @Override
+    public boolean undo(Player currentPlayer, Player opponent) {
+        return customGridDriver.undoMove(currentPlayer, opponent);
     }
 }

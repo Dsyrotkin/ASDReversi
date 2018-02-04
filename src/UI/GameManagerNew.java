@@ -68,7 +68,7 @@ public class GameManagerNew extends Group {
         });
         board.restoreGameProperty().addListener((ov, b, b1) -> {
             if (b1) {
-                doRestoreSession();
+                //doRestoreSession();
             }
         });
         board.saveGameProperty().addListener((ov, b, b1) -> {
@@ -143,9 +143,7 @@ public class GameManagerNew extends Group {
      * Save the game to a properties file, without confirmation
      */
     private void doSaveSession() {
-        GameState currentState = null; // gridOperator.getCurrentState();
-        RecordManager recordManager = RecordManager.getInstance();
-        recordManager.saveRecordToFile(currentState);
+        gameEngine.doSaveSession();
     }
 
     /** 
@@ -156,33 +154,29 @@ public class GameManagerNew extends Group {
     }
 
     private void performUndo() {
-        RecordManager recordManager = RecordManager.getInstance();
-        GameState previousState = recordManager.getPreviousState();
-        if(restoreGameState(previousState)) {
-            recordManager.removeLastState();
-        }
+        gameEngine.performUndo();
     }
     
     /** 
      * Restore the game from a properties file, without confirmation
      */
-    private void doRestoreSession() {
+    /*private void doRestoreSession() {
         RecordManager recordManager = RecordManager.getInstance();
         GameState savedState = recordManager.getSavedRecord();
         recordManager.clearStoredStates();
         restoreGameState(savedState);
-        //gridOperator.storeGameState();
+        gridOperator.storeGameState();
     }
 
     private boolean restoreGameState(GameState state) {
         if(state != null) {
-            //gridOperator.restoreGridState(state.getPieces());
+            gridOperator.restoreGridState(state.getPieces());
             if (state.getCurrentPlayer() != engine.getCurrentPlayer()) engine.swapPlayers();
             engine.updateScores();
             return true;
         }
         return false;
-    }
+    }*/
 
     /**
      * Save actual record to a properties file

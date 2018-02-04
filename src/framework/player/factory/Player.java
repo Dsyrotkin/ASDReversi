@@ -1,6 +1,8 @@
 package framework.player.factory;
 
-public abstract class Player {
+import java.io.Serializable;
+
+public abstract class Player implements Serializable {
     protected int id;
     protected String name;
 

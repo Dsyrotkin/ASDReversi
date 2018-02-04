@@ -8,28 +8,7 @@ public class ReversiPiece extends Piece {
         super(rule, row, column);
     }
 
-    @Override
-    public void action(Move from, Move to) {
-        rule.move(from, to);
-    }
-
-    @Override
-    public boolean validateMove(Move from, Move to) {
-        return rule.validateMove(from, to);
-    }
-
-    /*@Override
-    public Position getIndex() {
-        return new Position(row,column);
-    }*/
-
-    @Override
-    public CellStatus getCellStatus() {
-        return cellStatus;
-    }
-
-    @Override
-    public void setCellStatus(CellStatus cellStatus) {
-        this.cellStatus = cellStatus;
+    public ReversiPiece(Piece piece){
+        super(piece);
     }
 }

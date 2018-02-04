@@ -46,4 +46,9 @@ public class ScoreBoard {
         return false;
     }
 
+    public void clearBoard(){
+        playerTwoScore.clear();
+        playerOneScore.clear();
+    }
+
 }

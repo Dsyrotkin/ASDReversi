@@ -9,8 +9,6 @@ import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Translate;
 
-import java.util.zip.CheckedOutputStream;
-
 public class ReversiPieceWrapper extends PieceWrapper {
 
     private Ellipse ellipse; // ellipse representing the player's ellipse
@@ -78,11 +76,29 @@ public class ReversiPieceWrapper extends PieceWrapper {
     }
 
     // method that will set the piece type
-    public void setPiece(final Move move) {
+    public void decoratePiece(final Move move) {
 
         int playerId = move.getCurrentPlayer().getId();
-
+        setPiece(move.getPiece());
         piece.setPlayerId(move.getCurrentPlayer().getId());
+
+        switch(playerId) {
+            case 1:
+                ellipse.setFill(Color.WHITE);
+                break;
+            case 2:
+                ellipse.setFill(Color.BLACK);
+                break;
+        }
+
+    }
+
+    // method that will set the piece type
+    public void decoratePiece(final Piece piece) {
+
+        int playerId = piece.getPlayerId();
+        setPiece(piece);
+        piece.setPlayerId(playerId);
 
         switch(playerId) {
             case 1:

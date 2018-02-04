@@ -1,5 +1,6 @@
 package reversi;
 
+import framework.board.GameStateNew;
 import framework.board.ScoreBoard;
 import framework.gridCreator.visitor.GridCreatorVisitor;
 import framework.gridDriver.bridge.CustomGridDriver;
@@ -11,6 +12,7 @@ public class ReversiGridDriver extends CustomGridDriver {
 
     // 3x3 array that holds the pieces that surround a given piece
     private int[][] surrounding;
+
     // 3x3 array that determines if a reverse can be made in any direction
     private boolean[][] can_reverse;
 
@@ -18,6 +20,18 @@ public class ReversiGridDriver extends CustomGridDriver {
         super(x,y,gridSize);
         this.surrounding = new int[3][3];
         this.can_reverse = new boolean[3][3];
+    }
+
+    @Override
+    public void restoreGridState(GameStateNew gameState) {
+        Piece[][] pieces = gameState.getPieces();
+        getScore().clearBoard();
+        clearGrid();
+        for (int i = 0; i < pieces.length; i++){
+            for (int j = 0; j < pieces[i].length; j++){
+                setPiece(pieces[i][j]);
+            }
+        }
     }
 
     @Override
@@ -49,7 +63,6 @@ public class ReversiGridDriver extends CustomGridDriver {
 
     @Override
     public boolean clearGrid() {
-
         for (int i = 0; i < getRow(); i++){
             for (int j = 0; j < getColumn(); j++){
                 clearPiece(i,j);
@@ -61,7 +74,14 @@ public class ReversiGridDriver extends CustomGridDriver {
     @Override
     public void setPiece(Move move) {
         ReversiPieceWrapper pieceWrapper = (ReversiPieceWrapper) getGrid().getPiecesUI()[move.getX()][move.getY()];
-        pieceWrapper.setPiece(move);
+        pieceWrapper.decoratePiece(move);
+        getScore().addPiece(pieceWrapper.getPiece());
+    }
+
+    @Override
+    public void setPiece(Piece piece) {
+        ReversiPieceWrapper pieceWrapper = (ReversiPieceWrapper) getGrid().getPiecesUI()[piece.getRow()][piece.getColumn()];
+        pieceWrapper.decoratePiece(piece);
         getScore().addPiece(pieceWrapper.getPiece());
     }
 
