@@ -11,5 +11,6 @@ public interface IEngine {
     void determineWinner();
     void setBoard(Board board);
     void doSaveSession();
+    void doRestore();
     void performUndo();
 }

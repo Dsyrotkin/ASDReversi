@@ -1,6 +1,8 @@
 package framework.piece;
 
-public abstract class Piece {
+import java.io.Serializable;
+
+public abstract class Piece implements Serializable {
 
     protected int column, row;
     protected boolean isValidPiece;
@@ -95,6 +97,10 @@ public abstract class Piece {
 
     public RuleStrategy getRule() {
         return rule;
+    }
+
+    public void setRule(RuleStrategy rule) {
+        this.rule = rule;
     }
 
     @Override

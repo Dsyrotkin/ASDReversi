@@ -65,6 +65,13 @@ public abstract class CustomGridDriver {
         return recordManager.saveRecordToFile(state);
     }
 
+    public Player restoreFromFile(){
+        GameState savedState = recordManager.getSavedRecord();
+        recordManager.clearStoredStates();
+        restoreGameState(savedState,null,null);
+        return savedState.getCurrentPlayer();
+    }
+
     public boolean undoMove(Player currentPlayer, Player opponent){
         GameState previousState = recordManager.getPreviousState();
         if(previousState != null && restoreGameState(previousState, currentPlayer, opponent)) {

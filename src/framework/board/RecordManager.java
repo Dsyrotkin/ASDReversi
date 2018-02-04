@@ -56,7 +56,7 @@ public class RecordManager {
 
     public boolean saveRecordToFile(GameState state) {
         try {
-            FileOutputStream fos = new FileOutputStream(System.getProperty("java.io.tmpdir") + "save.txt");
+            FileOutputStream fos = new FileOutputStream(System.getProperty("user.home") + "/save.txt");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(state);
             oos.close();
@@ -72,7 +72,7 @@ public class RecordManager {
 
     public GameState getSavedRecord() {
         try {
-            FileInputStream fis = new FileInputStream(System.getProperty("java.io.tmpdir") + "save.txt");
+            FileInputStream fis = new FileInputStream(System.getProperty("user.home") + "/save.txt");
             ObjectInputStream ois = new ObjectInputStream(fis);
             GameState state = (GameState) ois.readObject();
             ois.close();

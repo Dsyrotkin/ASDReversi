@@ -30,6 +30,7 @@ public class ReversiGridDriver extends CustomGridDriver {
         initializeGrid();
         for (int i = 0; i < pieces.length; i++){
             for (int j = 0; j < pieces[i].length; j++){
+                pieces[i][j].setRule(new ReversiPieceRule(this));
                 setPiece(pieces[i][j]);
             }
         }

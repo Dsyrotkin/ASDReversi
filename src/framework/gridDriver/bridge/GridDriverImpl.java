@@ -55,6 +55,11 @@ public class GridDriverImpl extends GridDriver {
     }
 
     @Override
+    public Player restoreFromFile() {
+        return customGridDriver.restoreFromFile();
+    }
+
+    @Override
     public void tempSaveGame(Player currentPlayer, Player opponent) {
         customGridDriver.storeGameState(currentPlayer, opponent);
     }

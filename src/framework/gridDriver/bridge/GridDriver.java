@@ -31,6 +31,8 @@ public abstract class GridDriver {
 
     public abstract boolean saveGame(Player currentPlayer, Player opponent);
 
+    public abstract Player restoreFromFile();
+
     public abstract void tempSaveGame(Player currentPlayer, Player opponent);
 
     public abstract boolean undo(Player currentPlayer, Player opponent);

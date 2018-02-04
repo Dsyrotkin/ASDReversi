@@ -88,6 +88,14 @@ public class GameEngine extends ScoreSubject implements IEngine, IMoveListener {
     }
 
     @Override
+    public void doRestore() {
+        Player player = gridDriver.restoreFromFile();
+        if (player.getId() != currentPlayer.getId()){
+            swapPlayers();
+        }
+    }
+
+    @Override
     public void performUndo() {
         if (gridDriver.undo(currentPlayer, opponent)){
             swapPlayers();

@@ -66,7 +66,7 @@ public class GameManager extends Group {
         });
         board.restoreGameProperty().addListener((ov, b, b1) -> {
             if (b1) {
-                //doRestoreSession();
+                doRestoreSession();
             }
         });
         board.saveGameProperty().addListener((ov, b, b1) -> {
@@ -158,23 +158,9 @@ public class GameManager extends Group {
     /** 
      * Restore the game from a properties file, without confirmation
      */
-    /*private void doRestoreSession() {
-        RecordManager recordManager = RecordManager.getInstance();
-        GameState savedState = recordManager.getSavedRecord();
-        recordManager.clearStoredStates();
-        restoreGameState(savedState);
-        gridOperator.storeGameState();
+    private void doRestoreSession() {
+        gameEngine.doRestore();
     }
-
-    private boolean restoreGameState(GameState state) {
-        if(state != null) {
-            gridOperator.restoreGridState(state.getPieces());
-            if (state.getCurrentPlayer() != engine.getCurrentPlayer()) engine.swapPlayers();
-            engine.updateScores();
-            return true;
-        }
-        return false;
-    }*/
 
     /**
      * Save actual record to a properties file
