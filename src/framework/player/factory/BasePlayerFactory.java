@@ -1,5 +1,5 @@
 package framework.player.factory;
 
-public abstract class AbstractPlayerFactory {
+public abstract class BasePlayerFactory {
     public abstract Player createPlayer(PlayerType playerType);
 }

@@ -1,8 +1,8 @@
 package framework.gridDriver.bridge;
 
-import framework.board.GameStateNew;
+import framework.board.GameState;
 import framework.board.Grid;
-import framework.board.RecordManagerNew;
+import framework.board.RecordManager;
 import framework.board.ScoreBoard;
 import framework.gridCreator.visitor.GridCreatorVisitor;
 import framework.piece.Move;
@@ -16,7 +16,7 @@ public abstract class CustomGridDriver {
     private int gridSize;
     private ScoreBoard scoreBoard;
     private Grid grid;
-    RecordManagerNew recordManager = null;
+    RecordManager recordManager = null;
 
     public CustomGridDriver(){
         this.column = 0;
@@ -28,7 +28,7 @@ public abstract class CustomGridDriver {
         this.column = column;
         this.gridSize = gridSize;
         this.scoreBoard = new ScoreBoard();
-        this.recordManager = RecordManagerNew.getInstance();
+        this.recordManager = RecordManager.getInstance();
     }
 
     public Grid createGrid(GridCreatorVisitor visitor) {
@@ -37,8 +37,8 @@ public abstract class CustomGridDriver {
         return getGrid();
     }
 
-    public GameStateNew getGameState(Player currentPlayer, Player opponent){
-        GameStateNew gameState = new GameStateNew();
+    public GameState getGameState(Player currentPlayer, Player opponent){
+        GameState gameState = new GameState();
         gameState.setPieces(clonePieces(getGrid().getPieces()));
         gameState.setCurrentPlayer(currentPlayer);
         gameState.setOpponent(opponent);
@@ -61,12 +61,12 @@ public abstract class CustomGridDriver {
     }
 
     public boolean saveGameToFile(Player currentPlayer, Player opponenet){
-        GameStateNew state = getGameState(currentPlayer, opponenet);
+        GameState state = getGameState(currentPlayer, opponenet);
         return recordManager.saveRecordToFile(state);
     }
 
     public boolean undoMove(Player currentPlayer, Player opponent){
-        GameStateNew previousState = recordManager.getPreviousState();
+        GameState previousState = recordManager.getPreviousState();
         if(previousState != null && restoreGameState(previousState, currentPlayer, opponent)) {
             recordManager.removeLastState();
             return true;
@@ -74,7 +74,7 @@ public abstract class CustomGridDriver {
         return false;
     }
 
-    private boolean restoreGameState(GameStateNew state, Player currentPlayer, Player opponent) {
+    private boolean restoreGameState(GameState state, Player currentPlayer, Player opponent) {
         if(state != null) {
             restoreGridState(state);
             /*if (!state.getCurrentPlayer().equals(currentPlayer)) {
@@ -96,7 +96,7 @@ public abstract class CustomGridDriver {
         recordManager.clearStoredStates();
     }
 
-    public abstract void restoreGridState(GameStateNew gameState);
+    public abstract void restoreGridState(GameState gameState);
     public abstract boolean initializeGrid();
     public abstract boolean executeMove(Move move);
     public abstract boolean clearGrid();

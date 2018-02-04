@@ -1,6 +1,6 @@
 package reversi;
 
-import framework.board.GameStateNew;
+import framework.board.GameState;
 import framework.board.ScoreBoard;
 import framework.gridCreator.visitor.GridCreatorVisitor;
 import framework.gridDriver.bridge.CustomGridDriver;
@@ -23,7 +23,7 @@ public class ReversiGridDriver extends CustomGridDriver {
     }
 
     @Override
-    public void restoreGridState(GameStateNew gameState) {
+    public void restoreGridState(GameState gameState) {
         Piece[][] pieces = gameState.getPieces();
         getScore().clearBoard();
         clearGrid();

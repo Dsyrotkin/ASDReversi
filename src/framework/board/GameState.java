@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * zack
  */
-public class GameStateNew {
+public class GameState {
 
     private Player currentPlayer;
     private Player opponent;

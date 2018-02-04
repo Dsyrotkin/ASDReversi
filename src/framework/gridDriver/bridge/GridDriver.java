@@ -1,6 +1,5 @@
 package framework.gridDriver.bridge;
 
-import framework.board.GameStateNew;
 import framework.board.Grid;
 import framework.board.ScoreBoard;
 import framework.gridCreator.visitor.GridCreatorVisitor;

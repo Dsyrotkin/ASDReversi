@@ -1,7 +1,10 @@
-package UI;
+package reversi;
 
-import framework.board.GameBoard;
+import UI.GameManager;
 import framework.board.builder.GameBoardBuilder;
+import framework.board.decorator.PieceLayout;
+import framework.gridCreator.visitor.GridCreatorVisitor;
+import framework.gridDriver.bridge.CustomGridDriver;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -10,19 +13,20 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 
-public class ReversiBoardBuilder implements GameBoardBuilder {
+public class ReversiBoardBuilder extends GameBoardBuilder {
 
-	GameManager manager;
-	Board board;
-	
-	public ReversiBoardBuilder(GameManager manager, GridOperator grid)
-	{
-		this.manager=manager;
-		board=new Board(grid);
-	}
-	@Override
-	public void createToolBar() {
-        HBox toolbar=new HBox();    
+    GameManager manager;
+    GridCreatorVisitor visitor;
+    public ReversiBoardBuilder(GameManager manager, PieceLayout pieceLayout,
+                               CustomGridDriver customGridDriver, GridCreatorVisitor visitor) {
+        super(new ReversiBoard1(pieceLayout, customGridDriver));
+        this.manager=manager;
+        this.visitor = visitor;
+    }
+
+    @Override
+    public void createToolBar() {
+        HBox toolbar=new HBox();
         toolbar.setAlignment(Pos.CENTER);
         toolbar.setPadding(new Insets(10.0));
         Button btItem1 = createButtonItem("mSave", "Save Session", t->manager.saveSession());
@@ -34,20 +38,20 @@ public class ReversiBoardBuilder implements GameBoardBuilder {
         Button btItem6 = createButtonItem("mQuit", "Quit Game", t->manager.quitGame());
         toolbar.getChildren().add(btItem6);
         board.setToolBar(toolbar);
-	}
+    }
 
 
-	@Override
-	public void createScore() {
-		board.createScore();
-	}
+    @Override
+    public void createScore() {
+        board.createScore();
+    }
 
-	@Override
-	public void createBoard() {
-		board.createGrid();
-	}
+    @Override
+    public void createBoard() {
+        board.createGrid(visitor);
+    }
 
-	private Button createButtonItem(String symbol, String text, EventHandler<ActionEvent> t){
+    private Button createButtonItem(String symbol, String text, EventHandler<ActionEvent> t){
         Button g=new Button();
         g.setPrefSize(40, 40);
         g.setId(symbol);
@@ -55,8 +59,4 @@ public class ReversiBoardBuilder implements GameBoardBuilder {
         g.setTooltip(new Tooltip(text));
         return g;
     }
-	@Override
-	public GameBoard getBoard() {
-		return board;
-	}
 }
