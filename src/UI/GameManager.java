@@ -18,7 +18,7 @@ public class GameManager extends Group {
 
     public static final int DEFAULT_GRID_SIZE=8;
 
-    ReversiBoard1 board;
+    ReversiBoard board;
 
     GameEngine gameEngine = null;
 
@@ -47,7 +47,7 @@ public class GameManager extends Group {
 
         GameBoardDirector directorNew = new GameBoardDirector(reversiBoardBuilderNew);
 
-        board = (ReversiBoard1) directorNew.getBoard();
+        board = (ReversiBoard) directorNew.getBoard();
 
         gameEngine.setBoard(board);
         gameEngine.addScoreObserver(board);

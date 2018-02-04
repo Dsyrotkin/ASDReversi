@@ -19,7 +19,7 @@ public class ReversiBoardBuilder extends GameBoardBuilder {
     GridCreatorVisitor visitor;
     public ReversiBoardBuilder(GameManager manager, PieceLayout pieceLayout,
                                CustomGridDriver customGridDriver, GridCreatorVisitor visitor) {
-        super(new ReversiBoard1(pieceLayout, customGridDriver));
+        super(new ReversiBoard(pieceLayout, customGridDriver));
         this.manager=manager;
         this.visitor = visitor;
     }

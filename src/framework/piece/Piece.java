@@ -1,12 +1,5 @@
 package framework.piece;
 
-import framework.IMoveOutcome;
-import framework.player.factory.Player;
-import framework.player.factory.PlayerFactory;
-import framework.player.factory.PlayerType;
-
-import java.io.Serializable;
-
 public abstract class Piece {
 
     protected int column, row;

@@ -1,6 +1,5 @@
 package framework;
 
-import engine.ScoreSubject;
 import framework.board.Board;
 import framework.piece.Move;
 import framework.piece.Piece;

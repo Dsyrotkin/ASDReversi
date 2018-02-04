@@ -1,6 +1,6 @@
 package framework.board;
 
-import engine.ScoreObserver;
+import framework.ScoreObserver;
 
 public interface GameBoard extends ScoreObserver {
 

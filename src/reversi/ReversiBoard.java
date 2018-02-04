@@ -42,7 +42,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-public class ReversiBoard1 extends Board {
+public class ReversiBoard extends Board {
     public static final int CELL_SIZE = 64;
     private static final int BORDER_WIDTH = (14 + 2) / 2;
     private static final int TOP_HEIGHT = 92;
@@ -108,7 +108,7 @@ public class ReversiBoard1 extends Board {
 
     private Grid grid;
 
-    public ReversiBoard1(PieceLayout pieceLayout, CustomGridDriver customGridDriver){
+    public ReversiBoard(PieceLayout pieceLayout, CustomGridDriver customGridDriver){
 
         super(pieceLayout, customGridDriver);
 
@@ -335,7 +335,7 @@ public class ReversiBoard1 extends Board {
                     buttonsOverlay.getChildren().add(btn2);
                 }
                 if(!layerOnProperty.get()){
-                    ReversiBoard1.this.getChildren().addAll(overlay,buttonsOverlay);
+                    ReversiBoard.this.getChildren().addAll(overlay,buttonsOverlay);
                     layerOnProperty.set(true);
                 }
             }
