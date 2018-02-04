@@ -1,13 +1,13 @@
 package framework.gridCreator.visitor;
 
-import framework.piece.GamePiece;
-import framework.gridDriver.strategy.CustomGridStrategy;
+import framework.board.Grid;
+import framework.gridDriver.bridge.CustomGridDriver;
 
 public abstract class GridCreatorVisitor {
 
-    public final void visit(CustomGridStrategy gridStrategy){
+    public final void visit(CustomGridDriver gridStrategy){
         gridStrategy.setGrid(createGrid(gridStrategy));
     }
 
-    abstract protected GamePiece[][] createGrid(CustomGridStrategy strategy);
+    abstract protected Grid createGrid(CustomGridDriver strategy);
 }

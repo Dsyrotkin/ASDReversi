@@ -1,50 +1,57 @@
 package UI;
 
-import engine.ReversiEngine;
+import framework.GameEngine;
 import framework.board.builder.GameBoardDirector;
+import framework.board.decorator.PieceLayout;
+import framework.gridCreator.visitor.GridCreatorVisitor;
+import framework.gridDriver.bridge.CustomGridDriver;
 import javafx.application.HostServices;
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.Group;
+import reversi.*;
 
 /**
  *
- * @author bruno
+ * @author zack
  */
 public class GameManager extends Group {
 
     public static final int DEFAULT_GRID_SIZE=8;
 
-    
+    ReversiBoard board;
 
-
-    private final Board board;
-    private final GridOperator gridOperator;
-    ReversiEngine engine=new ReversiEngine();
+    GameEngine gameEngine = null;
 
     public GameManager() {
         this(DEFAULT_GRID_SIZE);
     }
-    
+
     /**
      * GameManager is a Group containing a Board that holds a grid and the score
      * a Map holds the location of the tiles in the grid
-     * 
+     *
      * The purpose of the game is sum the value of the tiles up to 2048 points
      * Based on the Javascript version: https://github.com/gabrielecirulli/2048
-     * 
+     *
      * @param gridSize defines the size of the grid, default 4x4
      */
     public GameManager(int gridSize) {
-        
-        gridOperator=new GridOperator(gridSize,engine,engine);
-        engine.setPiece(gridOperator);
-        engine.setGridsSize(gridSize);
 
-        GameBoardDirector director=new GameBoardDirector(new ReversiBoardBuilder(this,gridOperator));
-        director.constructBoard();
-        board = (Board)director.getBoard();//new Board(gridOperator);
-        engine.addScoreObserver(board);
-        
+        gameEngine = new GameEngine();
+
+        CustomGridDriver customGridDriver = new ReversiGridDriver(gridSize,gridSize,gridSize);
+        PieceLayout pieceLayout = new ReversiPieceLayout(gameEngine);
+        GridCreatorVisitor visitor = new RGridCreatorVisitor();
+
+        ReversiBoardBuilder reversiBoardBuilderNew = new ReversiBoardBuilder(this,pieceLayout,customGridDriver,visitor);
+
+        GameBoardDirector directorNew = new GameBoardDirector(reversiBoardBuilderNew);
+
+        board = (ReversiBoard) directorNew.getBoard();
+
+        gameEngine.setBoard(board);
+        gameEngine.addScoreObserver(board);
+
         this.getChildren().add(board);
 
         board.clearGameProperty().addListener((ov, b, b1) -> {
@@ -88,7 +95,7 @@ public class GameManager extends Group {
      * Starts the game by adding 1 or 2 tiles at random locations
      */
     private void startGame() {
-    	engine.startGame();
+    	gameEngine.startGame();
         board.startGame();
     }
     
@@ -134,9 +141,7 @@ public class GameManager extends Group {
      * Save the game to a properties file, without confirmation
      */
     private void doSaveSession() {
-        GameState currentState = gridOperator.getCurrentState();
-        RecordManager recordManager = RecordManager.getInstance();
-        recordManager.saveRecordToFile(currentState);
+        gameEngine.doSaveSession();
     }
 
     /** 
@@ -147,32 +152,14 @@ public class GameManager extends Group {
     }
 
     private void performUndo() {
-        RecordManager recordManager = RecordManager.getInstance();
-        GameState previousState = recordManager.getPreviousState();
-        if(restoreGameState(previousState)) {
-            recordManager.removeLastState();
-        }
+        gameEngine.performUndo();
     }
     
     /** 
      * Restore the game from a properties file, without confirmation
      */
     private void doRestoreSession() {
-        RecordManager recordManager = RecordManager.getInstance();
-        GameState savedState = recordManager.getSavedRecord();
-        recordManager.clearStoredStates();
-        restoreGameState(savedState);
-        gridOperator.storeGameState();
-    }
-
-    private boolean restoreGameState(GameState state) {
-        if(state != null) {
-            gridOperator.restoreGridState(state.getPieces());
-            if (state.getCurrentPlayer() != engine.getCurrentPlayer()) engine.swapPlayers();
-            engine.updateScores();
-            return true;
-        }
-        return false;
+        gameEngine.doRestore();
     }
 
     /**

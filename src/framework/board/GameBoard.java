@@ -1,10 +1,10 @@
 package framework.board;
 
-import engine.ScoreObserver;
-import framework.player.factory.Player;
+import framework.ScoreObserver;
 
-public interface GameBoard extends ScoreObserver{
+public interface GameBoard extends ScoreObserver {
 
     void quitGame();
     void startGame();
+    //void pauseGame();
 }

@@ -1,9 +1,16 @@
 package framework;
 
+import framework.board.Board;
+import framework.player.factory.Player;
+
 public interface IEngine {
     void determineGameOver();
-    void initializeGame();
-    default void updateScore(){
-        ///update score, some games doesn't keep score like chess
-    }
+    void startGame();
+    void updateScore();
+    void swapPlayers();
+    void determineWinner();
+    void setBoard(Board board);
+    void doSaveSession();
+    void doRestore();
+    void performUndo();
 }

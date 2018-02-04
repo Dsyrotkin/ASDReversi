@@ -1,8 +1,8 @@
 package framework;
 
-import framework.piece.GamePiece;
+import framework.piece.Piece;
 
 public interface IMoveListener {
 	void onClick(int row, int col);
-	void onMove(GamePiece piece);
+	void onMove(Piece piece);
 }
