@@ -1,12 +1,12 @@
 package framework.player.factory;
 
-public class PlayerFactory extends AbstractPlayerFactory{
+public class PlayerFactory extends BasePlayerFactory {
 
-    private static AbstractPlayerFactory playerFactory = new PlayerFactory();
+    private static BasePlayerFactory playerFactory = new PlayerFactory();
 
     private PlayerFactory(){}
 
-    public static AbstractPlayerFactory getFactory() {
+    public static BasePlayerFactory getFactory() {
         return playerFactory;
     }
 

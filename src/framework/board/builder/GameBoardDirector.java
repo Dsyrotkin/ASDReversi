@@ -1,11 +1,11 @@
 package framework.board.builder;
 
-import framework.board.GameBoard;
+import framework.board.Board;
 
 public class GameBoardDirector {
-	
+
 	private GameBoardBuilder builder = null; //or multiple meal builders
-	
+
 	public GameBoardDirector(GameBoardBuilder builder) {
 		this.builder = builder;
 	}
@@ -15,7 +15,8 @@ public class GameBoardDirector {
 		builder.createToolBar();
 		builder.createBoard();
 	}
-	public GameBoard getBoard() {
+
+	public Board getBoard() {
 		return builder.getBoard();
 	}
 }

@@ -1,12 +1,24 @@
 package framework.board.builder;
 
-import framework.board.GameBoard;
+import framework.board.Board;
 
-public interface GameBoardBuilder {
+public abstract class GameBoardBuilder {
 
-	GameBoard getBoard();
+	protected Board board;
+
+	public GameBoardBuilder(Board board){
+		this.board = board;
+	}
+
+	public final Board getBoard(){
+		createToolBar();
+		createScore();
+		createBoard();
+
+		return board;
+	}
 	
-	void createToolBar();
-	void createScore();
-	void createBoard();
+	public abstract void createToolBar();
+	public abstract void createScore();
+	public abstract void createBoard();
 }

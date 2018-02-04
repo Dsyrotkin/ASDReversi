@@ -1,9 +1,7 @@
 package reversi;
 
 import framework.IMoveOutcome;
-import framework.IPieceInfo;
 import framework.gridDriver.bridge.CustomGridDriver;
-import framework.piece.CellStatus;
 import framework.piece.Move;
 import framework.piece.Piece;
 import framework.piece.RuleStrategy;

@@ -1,7 +1,6 @@
 package framework;
 
 import engine.ScoreSubject;
-import engine.ScoreSubjectNew;
 import framework.board.Board;
 import framework.piece.Move;
 import framework.piece.Piece;
@@ -10,7 +9,7 @@ import framework.player.factory.PlayerFactory;
 import framework.gridDriver.bridge.GridDriver;
 import framework.player.factory.PlayerType;
 
-public class GameEngine extends ScoreSubjectNew implements IEngine, IMoveListener {
+public class GameEngine extends ScoreSubject implements IEngine, IMoveListener {
 
     private Player currentPlayer;
     private Player opponent;

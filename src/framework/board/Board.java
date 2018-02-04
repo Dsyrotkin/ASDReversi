@@ -11,7 +11,7 @@ import framework.piece.Move;
 import javafx.scene.Group;
 import javafx.scene.layout.HBox;
 
-public abstract class Board extends Group implements GameBoardNew {
+public abstract class Board extends Group implements GameBoard {
 
     protected PieceLayoutDecorator pieceLayoutDecorator;
 

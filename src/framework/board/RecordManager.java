@@ -1,27 +1,23 @@
 package framework.board;
 
-import UI.GameState;
 import framework.piece.Piece;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Stack;
 
-public class RecordManagerNew {
-    //private List<GameStateNew> savedStates = new ArrayList<>();
-    final private Stack<GameStateNew> savedStates = new Stack<>();
-    private static RecordManagerNew recordManager;
+public class RecordManager {
+    //private List<GameState> savedStates = new ArrayList<>();
+    final private Stack<GameState> savedStates = new Stack<>();
+    private static RecordManager recordManager;
 
-    private RecordManagerNew() { }
+    private RecordManager() { }
 
-    public static RecordManagerNew getInstance() {
-        if(recordManager == null) recordManager = new RecordManagerNew();
+    public static RecordManager getInstance() {
+        if(recordManager == null) recordManager = new RecordManager();
         return recordManager;
     }
 
-    public void saveState(GameStateNew state) {
+    public void saveState(GameState state) {
         savedStates.push(state);
     }
 
@@ -29,10 +25,10 @@ public class RecordManagerNew {
         savedStates.clear();
     }
 
-    public GameStateNew getPreviousState() {
+    public GameState getPreviousState() {
         if (savedStates.size() > 1){
-            GameStateNew state = savedStates.pop();
-            GameStateNew previousState = savedStates.peek();
+            GameState state = savedStates.pop();
+            GameState previousState = savedStates.peek();
             saveState(state);
             return previousState;
         }
@@ -58,7 +54,7 @@ public class RecordManagerNew {
         }*/
     }
 
-    public boolean saveRecordToFile(GameStateNew state) {
+    public boolean saveRecordToFile(GameState state) {
         try {
             FileOutputStream fos = new FileOutputStream(System.getProperty("java.io.tmpdir") + "save.txt");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
